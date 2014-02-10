@@ -1,0 +1,56 @@
+<div class="container-fluid">
+	<div class="row" >
+		<div class="page-header">
+			<h2>pikr</h2>
+			<p id="droptxt">Making hard decisions easier</p>
+		</div>
+	</div>
+	<div class="row" id="cnt">
+				<div class="col-md-2 thumbnail">
+						<div class="caption" id="bin1caption"></div>
+				</div>
+				
+				<div class="col-md-2 thumbnail">
+						<div class="caption" id="bin2caption"></div>
+				</div>
+					
+				<div class="col-md-2 thumbnail">
+						<div class="caption" id="bin3caption"></div>
+				</div>		
+  </div>
+ <div class="row" >
+				<div class="col-md-2 thumbnail" droppable drop="handleDrop" id="bin1">
+						<a class="thumbnail" href="#"  draggable drag="hadleDrag" id="item1">
+							<img data-src="holder.js/100%x80" src="img/IMG_20140202_074725.jpg">
+						</a>
+				</div>
+					
+				<div class="col-md-2 thumbnail" droppable drop="handleDrop" id="bin2">
+							<a class="thumbnail"href="#" draggable drag="hadleDrag" id="item2">
+								<img data-src="holder.js/100%x180" src="img/IMG_20140202_074736.jpg">
+						</a>
+			</div>
+					
+			<div class="col-md-2 thumbnail" droppable drop="handleDrop" id="bin3">
+						<a href="#" class="thumbnail" draggable drag="handleDrag" id="item3">
+							<img data-src="holder.js/200%x180" src="img/IMG_20140202_074832.jpg">
+					</a>	
+			</div>
+		</div>
+</div>
+
+<div class="row">
+		<ul class="list-group col-md-6" id="list">
+					<li class="list-group-item">
+							<label>Comments</label>
+							<textarea class="form-control" rows="2" placeholder="Please type any additional comments here"></textarea>	
+							<br>
+								<button class="btn btn-danger btn-xs" ng-click="submit()">Submit</button>
+							<button class="btn btn-info btn-xs" ng-click="go('/pickr')">Reset</button>		
+					</li>
+			</ul>
+	</div>
+	
+</div>
+
+
