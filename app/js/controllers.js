@@ -1,16 +1,22 @@
-var pikrAppControllers = angular.module('pikrAppControllers', []);
+Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61");
 
-pikrAppControllers.controller('pikrCtrl', ['$scope', '$location',
-  function ($scope, $location)
+var pikrAppControllers = angular.module('pikrAppControllers', ['angularParse']);
+
+pikrAppControllers.controller('pikrCtrl', ['$scope', 'picks', '$location', 'parsePersistence', '$routeParams', '$http', 'Submit', 'Name',
+  function ($scope, picks, $location, parsePersistence, $routeParams, $http, Submit, Name)
   {
-			 
-			angular.element("#cnt").hide();
+
+
+  	$scope.params = $routeParams;
+  	console.log($scope.params);
+  	$scope.picks = picks.getpicks({ id: $scope.params.id });
+
   	$scope.handleDrop = function (item, bin)
   	{
   		angular.element("#droptxt").html(item + ' has been dropped into ' + bin);
   	}
 
-			$scope.go = function (path)
+  	$scope.go = function (path)
   	{
   		$location.path(path);
   	};
@@ -18,27 +24,25 @@ pikrAppControllers.controller('pikrCtrl', ['$scope', '$location',
   	$scope.submit = function ()
   	{
 
-  		$scope.bin1 = angular.element("#bin1").children().length;
-  		$scope.bin2 = angular.element("#bin2").children().length;
-  		$scope.bin3 = angular.element("#bin3").children().length;
-  		
-				if($scope.bin1 > 1 || $scope.bin2 > 1 || $scope.bin2 > 1)
-				{
-						angular.element("#droptxt").html('Only one picture allowed per box.<br>');
-				}
-				else
-				{
-				 angular.element("#cnt").show();
-					angular.element("#bin1caption").text('First');
-					angular.element("#bin2caption").text('Second');
-					angular.element("#bin3caption").text('Third'); 	
-					angular.element("#droptxt").html('Submitted.<br>');
-				}
-				
+  		$scope.name = Name.getName($scope.picks);
+				angular.element("#droptxt").html($scope.name);
+  		$scope.msg = Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
+  		angular.element("#droptxt").append($scope.msg);
+
   	}
 
+  }] );
 
 
-
+  pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details',
+  function ($scope, $location, parseQuery, Details)
+  {
+			
+					Details.getDetails(parseQuery, "pckid", "pck0001");
 
   } ]);
+					
+					
+				
+
+	

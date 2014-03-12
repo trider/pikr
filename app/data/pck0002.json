@@ -4,21 +4,28 @@
 						"name": "Item1",
 						"bin": "bin1",
 						"imageUrl": "img/IMG_20140202_074725.jpg", 
-      "description": "Half-rim frames."
+      "description": "Half-rim frames"
 				},
 				{
 						"id" : 2,
 						"name": "Item2",
 						"bin": "bin2",
 						"imageUrl": "img/IMG_20140202_074736.jpg", 
-      "description": "Full-rim frames."
+      "description": "Full-rim frames"
 				},
 				{
 						"id" : 3,
 						"name": "Item3",
 						"bin": "bin3",
 						"imageUrl": "img/IMG_20140202_074832.jpg", 
-      "description": "Rim-less frames."
+      "description": "Rim-less frames"
+				},
+								{
+						"id" : 4,
+						"name": "Item4",
+						"bin": "bin4",
+						"imageUrl": "img/IMG_20140202_074832.jpg", 
+      "description": "Rim-less frames"
 				}
 ]
 

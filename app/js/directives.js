@@ -4,25 +4,32 @@
 var pikrAppDirectives = angular.module('pikrAppDirectives', []);
 
 
-pikrAppDirectives.directive('draggable', function() {
-  return function(scope, element) {
-      var el = element[0];
-    
-      el.draggable = true;
-      
-      el.addEventListener('dragstart', function(e) {
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.clearData('Text');
-        e.dataTransfer.setData('Text', this.id);
-        this.classList.add('drag');
-        return false;
-      }, false);
-      
-      el.addEventListener('dragend', function(e) {
-        this.classList.remove('drag');
-        return false;
-      }, false);
-    }
+pikrAppDirectives.directive('draggable', function ()
+{
+	return function (scope, element)
+	{
+		var el = element[0];
+
+		el.draggable = true;
+
+		el.addEventListener('dragstart', function (e)
+		{
+			e.dataTransfer.effectAllowed = 'move';
+			e.dataTransfer.clearData('item');
+			e.dataTransfer.clearData('start');
+			e.dataTransfer.setData('item', this.id);
+			e.dataTransfer.setData('start', this.parentNode.id);
+
+			this.classList.add('drag');
+			return false;
+		}, false);
+
+		el.addEventListener('dragend', function (e)
+		{
+			this.classList.remove('drag');
+			return false;
+		}, false);
+	}
 });
 
 pikrAppDirectives.directive('droppable', function ()
@@ -51,6 +58,7 @@ pikrAppDirectives.directive('droppable', function ()
 
 			el.addEventListener('dragleave', function (e)
 			{
+
 				this.classList.remove('over');
 				return false;
 			}, false);
@@ -58,14 +66,18 @@ pikrAppDirectives.directive('droppable', function ()
 			el.addEventListener('drop', function (e)
 			{
 				if (e.stopPropagation) e.stopPropagation(); // Stops some browsers from redirecting.							
-
 				this.classList.remove('over');
 
 				var binId = this.id;
-				var item = document.getElementById(e.dataTransfer.getData('Text'));
+				var item = document.getElementById(e.dataTransfer.getData('item'));
+				var start = document.getElementById(e.dataTransfer.getData('start'));
+				
+				if(this.children.length > 0)
+				{
+						angular.element('#' + start.id).append(this.children[0]);
+				}
+					
 				this.appendChild(item);
-				//console.log(item.id);
-
 
 				scope.$apply(function (scope)
 				{
@@ -81,6 +93,20 @@ pikrAppDirectives.directive('droppable', function ()
 		}
 	}
 });
+
+//pikrAppDirectives.directive('pckDetails', function ()
+//  {
+
+//  	return {
+//  		
+//  	};
+//  })
+
+
+
+
+
+
 
 
 

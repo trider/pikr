@@ -1,56 +1,34 @@
 <div class="container-fluid">
-	<div class="row" >
-		<div class="page-header">
-			<h2>pikr</h2>
-			<p id="droptxt">Making hard decisions easier</p>
-		</div>
-	</div>
-	<div class="row" id="cnt">
-				<div class="col-md-2 thumbnail">
-						<div class="caption" id="bin1caption"></div>
-				</div>
-				
-				<div class="col-md-2 thumbnail">
-						<div class="caption" id="bin2caption"></div>
-				</div>
-					
-				<div class="col-md-2 thumbnail">
-						<div class="caption" id="bin3caption"></div>
-				</div>		
-  </div>
- <div class="row" >
-				<div class="col-md-2 thumbnail" droppable drop="handleDrop" id="bin1">
-						<a class="thumbnail" href="#"  draggable drag="hadleDrag" id="item1">
-							<img data-src="holder.js/100%x80" src="img/IMG_20140202_074725.jpg">
-						</a>
-				</div>
-					
-				<div class="col-md-2 thumbnail" droppable drop="handleDrop" id="bin2">
-							<a class="thumbnail"href="#" draggable drag="hadleDrag" id="item2">
-								<img data-src="holder.js/100%x180" src="img/IMG_20140202_074736.jpg">
-						</a>
-			</div>
-					
-			<div class="col-md-2 thumbnail" droppable drop="handleDrop" id="bin3">
-						<a href="#" class="thumbnail" draggable drag="handleDrag" id="item3">
-							<img data-src="holder.js/200%x180" src="img/IMG_20140202_074832.jpg">
-					</a>	
-			</div>
-		</div>
-</div>
+	<div class="page-header">
+		<h2>pikr</h2>
+		<p id="droptxt">Making hard decisions easier<br><b>Email: </b>{{ params.user }}<br><b>PickID: </b>{{ params.id }}</p>
+ </div>
 
-<div class="row">
-		<ul class="list-group col-md-6" id="list">
-					<li class="list-group-item">
-							<label>Comments</label>
-							<textarea class="form-control" rows="2" placeholder="Please type any additional comments here"></textarea>	
-							<br>
-								<button class="btn btn-danger btn-xs" ng-click="submit()">Submit</button>
-							<button class="btn btn-info btn-xs" ng-click="go('/pickr')">Reset</button>		
-					</li>
-			</ul>
 	</div>
-	
+	<div class="row" >
+		<div class="col-md-3" ng-repeat="pick in picks">
+			<div droppable drop="handleDrop" id="{{ pick.bin }}">
+				<div class="thumbnail" href="#"  draggable id="{{ pick.name }}">
+					<img data-src="holder.js/100%x80" src="{{ pick.imageUrl  }}" class="thumbnail">
+					<div id="{{ pick.name }}caption" class="caption"><b>{{ pick.name }}:</b> {{ pick.description }}</div>
+				</div>
+		</div>
+	</div>	
+</div>
+<div class="row col-md-9">
+	<div class="well">
+	<p>Please order the following pictures from left to right. Place your favorite picture in the rightmost square, etc.</p>
+</div>
+	<ul class="list-group" id="list">
+			<li class="list-group-item">
+					<label>Comments</label>
+					<textarea class="form-control" rows="1" placeholder="Please type any additional comments here" id="cmnt_txt"></textarea>	
+					<br>
+						<button class="btn btn-danger btn-xs" ng-click="submit()">Submit</button>
+						<button class="btn btn-info btn-xs" ng-click="go('/pickr')">Reset</button>		
+			</li>
+		</ul>
+	</div>
 </div>
 
 
