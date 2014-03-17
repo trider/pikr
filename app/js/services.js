@@ -15,7 +15,8 @@ pikrAppServices.factory('Name', function ()
   		var name = '';
   		angular.forEach(picks, function (value, index)
   		{
-  			name += angular.element("#" + value.bin).children(1).text() + '(' + index + ')';
+  			var val = picks.length - index;
+					name += angular.element("#" + value.bin).children(1).text() + '(' + val + ')';
   			if (index < len)
   			{
   				name += ',';
@@ -35,7 +36,8 @@ pikrAppServices.factory('Submit', function (){
 			
 			var len = picks.length - 1;
   	angular.forEach(picks, function (value, index){
-  		var picksObject = parsePersistence.new('picksObject');
+  		
+				var picksObject = parsePersistence.new('picksObject');
 				var name = angular.element("#" + value.bin).children(1).text()
 				var itm = name.slice(name.indexOf('Item'), name.indexOf(':'));
 				
@@ -43,7 +45,7 @@ pikrAppServices.factory('Submit', function (){
 					{ pckid: id, 
 							item: itm,
 							descrp: name, 
-							val: index
+							val: picks.length - index
 						});		
 					
 				picksObject.set("parent", pikrObject);
@@ -56,61 +58,104 @@ pikrAppServices.factory('Submit', function (){
 });
 
 
-pikrAppServices.service('Details', function (){
+pikrAppServices.service('Details', function ($q){
 
 
-					function getPicks(parseQuery, fld, id, resid) {
+					function getPicks(parseQuery, fld, id) {
 
-						var query = parseQuery.new('picksObject').equalTo(fld, id, resid);
+						var query = parseQuery.new('picksObject').equalTo(fld, id);
+						var deferred = $q.defer();
 						parseQuery.find(query).then(function(results) {
-						var items= '';
-							for (var i = 0; i < results.length; i++) { 
-									var object = results[i];
-									var parent = object.get('parent');
-									//items += parent.id + ',' + object.get('pckid') + "," + object.get('item') + ',' + object.get('val')+ '<br>';		
-									items +=  object.get('item') + ':' + object.get('val')+ '<br>';
-							}
 
-							angular.element("#" + resid).html(items);	
+						//var items= '';
+						//	for (var i = 0; i < results.length; i++) { 
+						//			var object = results[i];
+						//			var parent = object.get('parent').id;
+						//			if(i>0)
+						//			{
+						//					items += ', ';
+						//			}
+						//			items +=  object.get('item') + ':' + object.get('val');
+						//	}
+
+							//angular.element("#" + id).html(items);	
+							//console.log(items);
+							deferred.resolve(results);
+							//return results;	
 							
 						}, function(error) {
-								alert(JSON.stringify(error));
+									//deferred.rejected(JSON.stringify(error));
 						});
+
+						return deferred.promise;
 				
 		 } 
 
-		
-
 		this.getDetails = function (parseQuery, fld, id) {
-
-								var query = parseQuery.new('pikrObject').ascending(fld);
-								parseQuery.find(query).then(function(results) {
-											
-								var tblh = '<tr><th width="5%">id</th><th width="10%">pickid</th><th width="20%">user</th><th width="10%">results</th></tr>';
-								angular.element("#details").append('<tr>' + tblh + '</tr>');													
-					
-								for (var i = 0; i < results.length; i++) { 
+				
+			
+			var query = parseQuery.new('pikrObject').ascending(fld);	
+			var deferred = $q.defer();
+		
+			query.find(query).then(function(results) {
+				
+						var pcks = new Array();
+						for (var i = 0; i < results.length; i++) { 
 										var object = results[i];
-										var resid = '#res' + i;
-										var tbl = '<td>' + object.id + '</td>';
-										tbl+='<td>' + object.get('pckid') + '</td>';
-										tbl+='<td>' + object.get('user') + '</td>';
-										tbl+='<td id="' + object.get('pckid') +  '"></td>';
-										angular.element("#details").append('<tr>' + tbl + '</tr>');
-										getPicks(parseQuery, fld, object.get('pckid'), object.get('pckid'));
-									}
-									
-									
-											
-											
-						}, function(error) {
-								alert(JSON.stringify(error));
-						});
+										var pck = 
+										{
+												id: object.id, 
+												user: object.get('user'),
+												pckid: object.get('pckid'),
+												result: '',
+												comments: object.get('comments')			
+										};
+										pcks.push(pck);
+										
 
-						
+						}
+				
+				deferred.resolve(pcks);	
+
+			}, function(error) {
+					deferred.rejected(JSON.stringify(error));
+			});
+
+			return deferred.promise;
+
 		 } 
 
+
+			this.pckSubmittedStatus = function (parseQuery, params)
+			{
+
+					var pckid_query = parseQuery.new('pikrObject').equalTo('pckid', params.id);	
+					var user_query = parseQuery.new('pikrObject').equalTo('user', params.user);
+					var query = Parse.Query.or(pckid_query, user_query);
+					var deferred = $q.defer();
+
+						query.count(query).then(function(results) {
+						
+								if(results > 0)
+								{									
+											deferred.resolve("You already submitted this Pick. " + results);
+								}
+
+						}, function(error) {
+								deferred.rejected(JSON.stringify(error));
+						});
+
+						return deferred.promise;
+
+		}
+
+
+
 });
+
+
+
+
 
 
 
