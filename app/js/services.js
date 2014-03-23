@@ -6,6 +6,12 @@ pikrAppServices.factory('picks', ['$resource', function($resource){
 	});
 }]);
 
+pikrAppServices.factory('pcklst', ['$resource', function($resource){				
+	return $resource('data/pcks.json', {}, {
+		getPcklst: {method:'GET', params:{ID:'pick'}, isArray:true}
+	});
+}]);
+
 
 pikrAppServices.factory('Name', function ()
 {
@@ -45,7 +51,7 @@ pikrAppServices.factory('Submit', function (){
 					{ pckid: id, 
 							item: itm,
 							descrp: name, 
-							val: picks.length - index
+							val: len - index + 1
 						});		
 					
 				picksObject.set("parent", pikrObject);
@@ -59,39 +65,39 @@ pikrAppServices.factory('Submit', function (){
 
 
 pikrAppServices.service('Details', function ($q){
-
-
-					function getPicks(parseQuery, fld, id) {
-
-						var query = parseQuery.new('picksObject').equalTo(fld, id);
-						var deferred = $q.defer();
-						parseQuery.find(query).then(function(results) {
-
-						//var items= '';
-						//	for (var i = 0; i < results.length; i++) { 
-						//			var object = results[i];
-						//			var parent = object.get('parent').id;
-						//			if(i>0)
-						//			{
-						//					items += ', ';
-						//			}
-						//			items +=  object.get('item') + ':' + object.get('val');
-						//	}
-
-							//angular.element("#" + id).html(items);	
-							//console.log(items);
-							deferred.resolve(results);
-							//return results;	
-							
-						}, function(error) {
-									//deferred.rejected(JSON.stringify(error));
-						});
-
-						return deferred.promise;
+		this.getResults= function (parseQuery, fld) {
 				
-		 } 
+			var query = parseQuery.new('picksObject');	
+			var deferred = $q.defer();
+		
+			query.find(query).then(function(results) {
+				
+						var result = new Array();
+						for (var i = 0; i < results.length; i++) { 
+										var object = results[i];
+										var res = 
+										{
+												id: object.id, 
+												parent: object.get('parent').id,
+												pckid: object.get('pckid'),
+												item: object.get('item'),
+												descrp: object.get('descrp'),
+												val: object.get('val')			
+										};
+										result.push(res);
+										
 
-		this.getDetails = function (parseQuery, fld, id) {
+						}
+				
+				deferred.resolve(result);	
+
+			}, function(error) {
+					deferred.rejected(JSON.stringify(error));
+			});
+
+			return deferred.promise;
+		} 
+		this.getDetails = function (parseQuery, fld) {
 				
 			
 			var query = parseQuery.new('pikrObject').ascending(fld);	
@@ -107,8 +113,8 @@ pikrAppServices.service('Details', function ($q){
 												id: object.id, 
 												user: object.get('user'),
 												pckid: object.get('pckid'),
-												result: '',
-												comments: object.get('comments')			
+												comments: object.get('comments'),
+												created:	object.createdAt
 										};
 										pcks.push(pck);
 										
@@ -124,10 +130,7 @@ pikrAppServices.service('Details', function ($q){
 			return deferred.promise;
 
 		 } 
-
-
-			this.pckSubmittedStatus = function (parseQuery, params)
-			{
+		this.pckSubmittedStatus = function (parseQuery, params){
 
 					var pckid_query = parseQuery.new('pikrObject').equalTo('pckid', params.id);	
 					var user_query = parseQuery.new('pikrObject').equalTo('user', params.user);
@@ -148,10 +151,77 @@ pikrAppServices.service('Details', function ($q){
 						return deferred.promise;
 
 		}
+		
+		this.getTotals = function (parseQuery, pcklst, fld){
 
+				var query = parseQuery.new('picksObject').ascending(fld);	
+				var total = new Array();
+				var deferred = $q.defer();
+								query.find(query).then(function(results) {
+												
+										angular.forEach(pcklst, function(value, key){
+												var items = value.items;
+												var cnt = 0;
+												for (var j = 0; j < items.length; j++) { 
+															var val = 0;
+															for (var i = 0; i < results.length; i++) { 
+																		var object = results[i];	
+																		if(value.pckid == object.get('pckid') && items[j] == object.get('item')){
+																					val += 	object.get('val');						
+																		}	
+																		
+															}
+															total.push({
+																pckid: value.pckid,
+																item: items[j],
+																val: val
+														});
+														
+											}
+						
+											deferred.resolve(total);
+	
+									});
+																					
+							});
+							
+							return deferred.promise;	
+					
+			}	
 
+			this.countPckrs = function(parseQuery, pcklst, fld)
+			{
+					
+				var query = parseQuery.new('picksObject').ascending('fld');	
+				var total = new Array();
+				var deferred = $q.defer();
+								query.find(query).then(function(results) {
+												
+										angular.forEach(pcklst, function(value, key){
+										
+											var prev = value.pckid;
+											var val = 0;				
+											for (var i = 0; i < results.length; i++) { 
+														
+														var object = results[i];
+															
+														if(object.get('pckid') != prev){
+																	val ++;
+															}	
+														prev = object.get('pckid');						
+											}
+											total.push({ pckid: value.pckid, count: val-1});					
+										});			
+									deferred.resolve(total);												
+							});
+							
+							return deferred.promise;	
+
+			}
 
 });
+
+
 
 
 

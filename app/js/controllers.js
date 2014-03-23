@@ -7,21 +7,21 @@ pikrAppControllers.controller('pikrCtrl', ['$scope', 'picks', '$location', 'pars
 
 
 	$scope.params = $routeParams;
-	console.log($scope.params);
-
 	$scope.picks = picks.getpicks({ id: $scope.params.id });
 
 	var promise = Details.pckSubmittedStatus(parseQuery, $scope.params);
-			promise.then(function(res) {
-					alert(res);
-			}, function(reason) {
-					alert('Failed: ' + reason);
-			});
+	promise.then(function (res)
+	{
+		$scope.message = res;
+	}, function (reason)
+	{
+		alert('Failed: ' + reason);
+	});
 
 
 	$scope.handleDrop = function (item, bin)
 	{
-		angular.element("#droptxt").html(item + ' has been dropped into ' + bin);
+		$scope.message = item + ' has been dropped into ' + bin;
 	}
 
 	$scope.go = function (path)
@@ -41,18 +41,45 @@ pikrAppControllers.controller('pikrCtrl', ['$scope', 'picks', '$location', 'pars
 
 } ]);
 
-
-pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details',
-  function ($scope, $location, parseQuery, Details)
+pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', 
+  function ($scope, $location, parseQuery, Details, pcklst, picks)
   {
 
-  	var promise = Details.getDetails(parseQuery, "pckid", "pck0001");
+  	$scope.pcks = pcklst.getPcklst();
+									
+			var promise = Details.getDetails(parseQuery, "pckid");
   	promise.then(function (res)
   	{
   		$scope.details = res;
   	});
 
+			var promise2 = Details.getResults(parseQuery, "val");
+  	promise2.then(function (data)
+  	{
+  		$scope.results = data;
+  	});
 
+  } ]);
+
+  pikrAppControllers.controller('totalCtrl', ['$scope', 'parseQuery', 'Details', 'pcklst', 'picks',
+  function ($scope, parseQuery, Details, pcklst, picks )
+  {
+
+			$scope.pcklst = pcklst.getPcklst({}, function()
+			{
+							
+							var promise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
+							promise.then(function (res)
+  					{
+  						$scope.totals = res;
+  					});		
+
+							var promise2 = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
+							promise2.then(function (res)
+  					{
+  						$scope.pckrs = res;
+  					});		
+			});
 
   } ]);
 					

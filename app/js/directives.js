@@ -101,19 +101,3 @@ pikrAppDirectives.directive('droppable', function ()
 //  		
 //  	};
 //  })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

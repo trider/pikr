@@ -1,11 +1,17 @@
 <div class="container-fluid">
 	<div class="page-header">
 		<h2>pikr</h2>
-		<p id="droptxt">Making hard decisions easier<br><b>Email: </b>{{ params.user }}<br><b>PickID: </b>{{ params.id }}</p>
-		<p>{{ message }}</p>
- </div>
-
+		<div class="row">
+				<div class="col-md-3">Making hard decisions easier</div>
+				<div class="col-md-3"><b>Email:</b> {{ params.user }}</div>
+				<div class="col-md-3"><b>PickID:</b>{{ params.id }} </div>
+		</div>
+		<div class="row">
+				<div class="col-md-3">{{ message }}</div>
+		</div>
+			
 	</div>
+
 	<div class="row" >
 		<div class="col-md-3" ng-repeat="pick in picks">
 			<div droppable drop="handleDrop" id="{{ pick.bin }}">
@@ -17,9 +23,7 @@
 	</div>	
 </div>
 <div class="row col-md-9">
-	<div class="well">
-	<p>Please order the following pictures from left to right. Place your favorite picture in the rightmost square, etc.</p>
-</div>
+	<div class="well">Please order the following pictures from left to right. Place your favorite picture in the rightmost square, etc.</div>
 	<ul class="list-group" id="list">
 			<li class="list-group-item">
 					<label>Comments</label>

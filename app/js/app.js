@@ -6,7 +6,8 @@ var pikrApp = angular.module('pikrApp', [ 'ngRoute', 'pikrAppControllers', 'pikr
 pikrApp.config(['$routeProvider',
   function ($routeProvider)
   {
-  	$routeProvider.
+  	$routeProvider
+							.
         when('/pikr', {
         	templateUrl: 'partials/welcome.html',
         	controller: 'pikrCtrl'
@@ -22,8 +23,15 @@ pikrApp.config(['$routeProvider',
 								.when('/details', {
 										templateUrl: 'partials/details.html',
 										controller: "detailsCtrl"
-								}).
-								otherwise({
+								})
+								.when('/results', {
+										templateUrl: 'partials/results.html',
+										controller: "detailsCtrl"
+								})
+								.when('/totals', {
+										templateUrl: 'partials/totals.html',
+										controller: "totalCtrl"
+								}).otherwise({
 										redirectTo: '/pikr'
 								});
 
