@@ -31,7 +31,11 @@ pikrApp.config(['$routeProvider',
 								.when('/totals', {
 										templateUrl: 'partials/totals.html',
 										controller: "totalCtrl"
-								}).otherwise({
+								}).when('/totals/:id', {
+										templateUrl: 'partials/totals.html',
+										controller: "totalCtrl"
+								})
+								.otherwise({
 										redirectTo: '/pikr'
 								});
 

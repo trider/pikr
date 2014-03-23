@@ -32,7 +32,7 @@ pikrAppControllers.controller('pikrCtrl', ['$scope', 'picks', '$location', 'pars
 	$scope.submit = function ()
 	{
 
-		$scope.name = Name.getName($scope.picks);
+		$scope.message = Name.getName($scope.picks);
 		angular.element("#droptxt").html($scope.name);
 		$scope.msg = Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
 		angular.element("#droptxt").append($scope.msg);

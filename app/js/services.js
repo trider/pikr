@@ -53,13 +53,14 @@ pikrAppServices.factory('Submit', function (){
 							descrp: name, 
 							val: len - index + 1
 						});		
-					
+				
 				picksObject.set("parent", pikrObject);
 				picksObject.save();	
   	});
-			
-			return ' (Saved)';
+			return " (saved)";	
+		
 		}
+		
 	}
 });
 
@@ -141,7 +142,8 @@ pikrAppServices.service('Details', function ($q){
 						
 								if(results > 0)
 								{									
-											deferred.resolve("You already submitted this Pick. " + results);
+											//deferred.resolve("You already submitted this Pick. " + results);
+											deferred.resolve("You already submitted this Pick. ");
 								}
 
 						}, function(error) {
@@ -161,20 +163,24 @@ pikrAppServices.service('Details', function ($q){
 												
 										angular.forEach(pcklst, function(value, key){
 												var items = value.items;
-												var cnt = 0;
+
 												for (var j = 0; j < items.length; j++) { 
 															var val = 0;
+															var desc;
 															for (var i = 0; i < results.length; i++) { 
 																		var object = results[i];	
 																		if(value.pckid == object.get('pckid') && items[j] == object.get('item')){
-																					val += 	object.get('val');						
+																					val += 	object.get('val');				
+																					desc = object.get('descrp');
 																		}	
 																		
 															}
+																		
 															total.push({
 																pckid: value.pckid,
 																item: items[j],
-																val: val
+																val: val, 
+																descrp: desc
 														});
 														
 											}

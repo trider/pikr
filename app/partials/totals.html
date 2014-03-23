@@ -1,23 +1,23 @@
 <div class="container-fluid">
 	<div class="page-header">
 		<h2>Totals</h2>
-	</div>
-	<div class="row">
+		<div class="row">
 			<div class="col-xs-3">
 				<label>Filter by pickid</label>
 				<input ng-model="pckid" type="text" class="form-control input-sm">
   </div>
 	</div>
+	</div>
 
-	
 	<div class="table-responsive">
 		<table class="table table-hover table-condensed">
 					<thead>
 							<tr>
 									<th>pckid</th>
 									<th>description</th>
-									<th>participants</th>
+									<th>items</th>
 									<th>results</th>
+									<th>participants</th>
 							</tr>
 					</thead>
 					<tbody ng-repeat="pck in pcklst | filter:pckid">
@@ -25,13 +25,18 @@
 									<td>{{ pck.pckid }}</td>
 									<td>{{ pck.description }}</td>
 									<td>
-													<div ng-repeat="pckr in pckrs | filter:pck.pckid">
-																{{ pckr.count }}
+													<div ng-repeat="total in totals | filter:pck.pckid">
+																{{ total.descrp }} 
 													 </div>
 									</td>
 								 <td>
 														<div ng-repeat="total in totals | filter:pck.pckid">
 																{{ total.item }} : {{ total.val }}
+													 </div>
+									</td>
+									<td>
+													<div ng-repeat="pckr in pckrs | filter:pck.pckid">
+																{{ pckr.count }}
 													 </div>
 									</td>
 							</tr>
