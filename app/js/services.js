@@ -139,12 +139,13 @@ pikrAppServices.service('Details', function ($q){
 					var deferred = $q.defer();
 
 						query.count(query).then(function(results) {
-						
+								angular.element("#submit").show();
 								if(results > 0)
 								{									
-											//deferred.resolve("You already submitted this Pick. " + results);
-											deferred.resolve("You already submitted this Pick. ");
+											deferred.resolve("You already submitted this Pick.");
+											angular.element("#submit").hide();
 								}
+
 
 						}, function(error) {
 								deferred.rejected(JSON.stringify(error));
@@ -197,31 +198,26 @@ pikrAppServices.service('Details', function ($q){
 
 			this.countPckrs = function(parseQuery, pcklst, fld)
 			{
-					
-				var query = parseQuery.new('picksObject').ascending('fld');	
-				var total = new Array();
+				
 				var deferred = $q.defer();
-								query.find(query).then(function(results) {
-												
-										angular.forEach(pcklst, function(value, key){
-										
-											var prev = value.pckid;
-											var val = 0;				
-											for (var i = 0; i < results.length; i++) { 
+				var total = new Array();
+				angular.forEach(pcklst, function(value, key){
+						
+					var query = parseQuery.new('pikrObject').equalTo(fld, value.pckid );	
+					query.count(query).then(function(results) {
 														
-														var object = results[i];
-															
-														if(object.get('pckid') != prev){
-																	val ++;
-															}	
-														prev = object.get('pckid');						
-											}
-											total.push({ pckid: value.pckid, count: val-1});					
-										});			
-									deferred.resolve(total);												
-							});
-							
-							return deferred.promise;	
+										total.push({ pckid: value.pckid, count: results});	
+											
+	
+						}, function(error) {
+								deferred.rejected(JSON.stringify(error));
+						});
+
+						deferred.resolve(total);			
+				
+				});			
+				
+				return deferred.promise;
 
 			}
 

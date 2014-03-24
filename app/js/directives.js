@@ -94,10 +94,34 @@ pikrAppDirectives.directive('droppable', function ()
 	}
 });
 
-//pikrAppDirectives.directive('pckDetails', function ()
-//  {
+pikrAppDirectives.directive('pckrDetails', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/details.html'
+	};
+});
 
-//  	return {
-//  		
-//  	};
-//  })
+pikrAppDirectives.directive('pckrTotals', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/totals.html'
+	};
+});
+
+pikrAppDirectives.directive('pckrFilter', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/filter.html'
+	};
+});
+
+pikrAppDirectives.directive('pckForm', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/pckform.html'
+	};
+});

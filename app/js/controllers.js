@@ -8,15 +8,14 @@ pikrAppControllers.controller('pikrCtrl', ['$scope', 'picks', '$location', 'pars
 
 	$scope.params = $routeParams;
 	$scope.picks = picks.getpicks({ id: $scope.params.id });
+	$scope.message = ' New, not saved'
 
-	var promise = Details.pckSubmittedStatus(parseQuery, $scope.params);
-	promise.then(function (res)
-	{
-		$scope.message = res;
-	}, function (reason)
-	{
-		alert('Failed: ' + reason);
-	});
+
+	//var promise = Details.pckSubmittedStatus(parseQuery, $scope.params);
+	//promise.then(function (res)
+	//{
+	//	$scope.message = res;
+	//});
 
 
 	$scope.handleDrop = function (item, bin)
@@ -36,35 +35,56 @@ pikrAppControllers.controller('pikrCtrl', ['$scope', 'picks', '$location', 'pars
 		angular.element("#droptxt").html($scope.name);
 		$scope.msg = Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
 		angular.element("#droptxt").append($scope.msg);
+		
+		$location.path('/totals/' + $scope.params.id);
 
 	}
 
 } ]);
 
-pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', 
-  function ($scope, $location, parseQuery, Details, pcklst, picks)
+pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', '$routeParams',
+  function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams)
   {
 
+  	$scope.params = $routeParams;
   	$scope.pcks = pcklst.getPcklst();
-									
-			var promise = Details.getDetails(parseQuery, "pckid");
+
+  	var promise = Details.getDetails(parseQuery, "pckid");
   	promise.then(function (res)
   	{
   		$scope.details = res;
   	});
 
-			var promise2 = Details.getResults(parseQuery, "val");
+  	var promise2 = Details.getResults(parseQuery, "val");
   	promise2.then(function (data)
   	{
   		$scope.results = data;
   	});
 
+			$scope.go = function (path)
+			{
+				
+				$location.path(path);
+				
+			};
+
+			
   } ]);
 
-  pikrAppControllers.controller('totalCtrl', ['$scope', 'parseQuery', 'Details', 'pcklst', 'picks',
-  function ($scope, parseQuery, Details, pcklst, picks )
+  pikrAppControllers.controller('totalCtrl', ['$scope', 'parseQuery', 'Details', 'pcklst', 'picks', '$location', '$routeParams',
+  function ($scope, parseQuery, Details, pcklst, picks, $location, $routeParams)
   {
+			$scope.params = $routeParams;
+			$scope.showPck = function ()
+			{
+				var id = angular.element("#pckid_txt").val();
+				var user = angular.element("#email_txt").val();
+				$location.path('/pikr/' + id + '/' + user);
+			};
 
+				
+			
+			
 			$scope.pcklst = pcklst.getPcklst({}, function()
 			{
 							
@@ -79,6 +99,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   					{
   						$scope.pckrs = res;
   					});		
+							
 			});
 
   } ]);

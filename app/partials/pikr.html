@@ -1,11 +1,7 @@
 <div class="container-fluid">
 	<div class="page-header">
 		<h2>pikr</h2>
-		<div class="row">
-				<div class="col-md-3">Making hard decisions easier</div>
-				<div class="col-md-3"><b>Email:</b> {{ params.user }}</div>
-				<div class="col-md-3"><b>PickID:</b>{{ params.id }} </div>
-		</div>
+		<div class="helptext"><p>Please order the following pictures from left to right. Place your favorite picture in the rightmost square, etc.</p></div>
 	</div>
 	<div class="row" >
 		<div class="col-md-3" ng-repeat="pick in picks">
@@ -18,19 +14,21 @@
 	</div>	
 </div>
 <div class="row col-md-9">
-	<div class="well">
-			<p>Please order the following pictures from left to right. Place your favorite picture in the rightmost square, etc.</p>
-			<div class="helptext">{{ message }}{{ msg }}</div>
-	</div>
 	<ul class="list-group" id="list">
 			<li class="list-group-item">
 					<label>Comments</label>
 					<textarea class="form-control" rows="1" placeholder="Please type any additional comments here" id="cmnt_txt"></textarea>	
 					<br>
-						<button class="btn btn-danger btn-xs" ng-click="submit()" id="#submit" ng-disabled="false">Submit</button>
-						<button class="btn btn-info btn-xs" ng-click="go('/pickr')">Reset</button>		
-			</li>
-		</ul>
+					<button class="btn btn-danger btn-xs" ng-click="submit()" id="submit" ng-disabled="false">Submit</button>
+					<button class="btn btn-info btn-xs" ng-click="go('/pickr')">Home</button>			
+		</li>
+	</ul>
+	<div class="well">
+				<div class="helptext"><b>Email:</b> {{ params.user }}</div>
+				<div class="helptext"><b>PickID:</b> {{ params.id }}</div>
+				<div class="helptext"><b>Status:</b> {{ message }}{{ msg }}</div>
+		</div>
+	 
 	</div>
 </div>
 

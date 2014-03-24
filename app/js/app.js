@@ -10,7 +10,7 @@ pikrApp.config(['$routeProvider',
 							.
         when('/pikr', {
         	templateUrl: 'partials/welcome.html',
-        	controller: 'pikrCtrl'
+        	controller: 'totalCtrl'
         })
 								.when('/pikr/:id', {
 										templateUrl: 'partials/pikr.html',
@@ -21,6 +21,10 @@ pikrApp.config(['$routeProvider',
 										controller: "pikrCtrl"
 								})
 								.when('/details', {
+										templateUrl: 'partials/details.html',
+										controller: "detailsCtrl"
+								})
+								.when('/details/:id', {
 										templateUrl: 'partials/details.html',
 										controller: "detailsCtrl"
 								})
