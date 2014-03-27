@@ -125,3 +125,11 @@ pikrAppDirectives.directive('pckForm', function ()
 		templateUrl: 'partials/pckform.html'
 	};
 });
+
+pikrAppDirectives.directive('pckNav', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/nav.html'
+	};
+});
