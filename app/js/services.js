@@ -223,6 +223,52 @@ pikrAppServices.service('Details', function ($q){
 
 });
 
+pikrAppServices.service('users', function ($q){
+		
+		this.userSignUp= function (usr, email, pw, fname, lname, gndr, status, prof, bday ) {
+			
+			var user = new Parse.User();
+			
+			user.set("username", usr);
+			user.set("password", pw);
+			user.set("email", email);	
+			user.set("firstname", fname);
+			user.set("lastname", lname);
+			user.set("gender", gndr);
+			user.set("status", status);
+			user.set("profession", prof);
+			user.set("birthday", bday);
+
+			var deferred = $q.defer();
+			user.signUp(null, {
+					success: function(user) {
+							deferred.resolve('Created user: ' + fname + ', ' + lname + ', ' + usr + ', ' 
+									+ bday + ', ' + gndr + ', ' + status + ', ' + prof + ', ' + pw + ', ' + email);	
+					},
+					error: function(user, error) {
+							alert("Error: " + error.code + " " + error.message);
+					}
+			});
+			
+			return deferred.promise;
+		}
+		
+		this.userLogin= function (usr, pw) {
+			
+			var deferred = $q.defer();
+			Parse.User.logIn(usr, pw, {
+			success: function(user) {
+					deferred.resolve('Logged in: ' + usr );	
+			},
+			error: function(user, error) {
+					alert("Error: " + error.code + " " + error.message);
+			}
+		});
+	
+		return deferred.promise;
+	}  
+
+});
 
 
 

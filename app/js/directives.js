@@ -133,3 +133,11 @@ pikrAppDirectives.directive('pckNav', function ()
 		templateUrl: 'partials/nav.html'
 	};
 });
+
+pikrAppDirectives.directive('pckLogin', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/login.html'
+	};
+});

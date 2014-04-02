@@ -35,12 +35,28 @@ pikrApp.config(['$routeProvider',
 								.when('/totals', {
 										templateUrl: 'partials/totals.html',
 										controller: "totalCtrl"
-								}).when('/totals/:id', {
+								})
+								.when('/totals/:id', {
 										templateUrl: 'partials/totals.html',
 										controller: "totalCtrl"
+								})
+								.when('/user', {
+										templateUrl: 'partials/user.html',
+										controller: "userCtrl"
+								})
+								.when('/login', {
+										templateUrl: 'partials/login.html',
+										controller: "userCtrl"
 								})
 								.otherwise({
 										redirectTo: '/pikr'
 								});
 
   } ]);
+
+//		pikrApp.config(function (ezfbProvider) {
+//				ezfbProvider
+//				.setInitParams({
+//						appId: '420875628049980'
+//				});  
+//});
