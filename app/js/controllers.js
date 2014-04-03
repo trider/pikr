@@ -2,13 +2,20 @@ Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGp
 
 var pikrAppControllers = angular.module('pikrAppControllers', ['angularParse']);
 
-pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details',
-function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details)
+pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users',
+function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users)
 {
 
+	angular.element("#logout").hide();
 	$scope.params = $routeParams;
 	$scope.picks = picks.getpicks({ id: $scope.params.id });
-	$scope.message = ' New, not saved';
+	//$scope.message = ' New, not saved';
+
+	var promise = users.getUsrStatus();
+	promise.then(function (res)
+ {
+  $scope.status = res;
+ });		
 
 
 	//var promise = Details.pckSubmittedStatus(parseQuery, $scope.params);
@@ -33,10 +40,22 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 
 		$scope.message = Name.getName($scope.picks);
 		angular.element("#droptxt").html($scope.name);
-		$scope.msg = Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
-		angular.element("#droptxt").append($scope.msg);
 
-		$location.path('/totals/' + $scope.params.id);
+		var promise =  Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
+		promise.then(function (res)
+		{
+			$scope.msg = res;
+			$scope.message = $scope.msg
+			//$location.path('/totals/' + $scope.params.id);
+			$location.path('/totals/' + $scope.params.id + '/' + $scope.params.user );
+		
+		});
+
+
+		//$scope.msg = Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
+		//angular.element("#droptxt").append($scope.msg);
+
+		//$location.path('/totals/' + $scope.params.id);
 
 	}
 
@@ -107,52 +126,61 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   function ($scope, parseQuery, $location, $routeParams, users)
   {
 
-  	//$scope.status = "Create new user";
+			var stspromise = users.getUsrStatus();
+  	stspromise.then(function (res)
+  	{
+  		$scope.status = res;
+  	});
 
   	$scope.submit = function ()
   	{
   		var fname = angular.element("#fnametxt").val();
   		var lname = angular.element("#lnametxt").val();
-  		var bday = angular.element("#bdaytxt").val();
   		var gndr = angular.element("#gndrtxt").val();
   		var status = angular.element("#statustxt").val();
   		var prof = angular.element("#proftxt").val();
   		var pw = angular.element("#pwtxt").val();
-				var usr = angular.element("#usrtxt").val();
+  		var usr = angular.element("#usrtxt").val();
   		var email = angular.element("#emailtxt").val();
 
-				//var  bday= new Date("October 13, 1975 11:13:00")
-  		
-  		//$scope.status = fname + ', ' + lname + ', ' + user + ', ' + bday + ', ' + gndr + ', ' + status + ', ' + prof + ', ' + pw + ', ' + email;
+  		var bday = new Date(angular.element("#bdaytxt").val())
 
-  		var usrpromise = users.userSignUp(usr, email, pw, fname, lname, gndr, status, prof, bday );
+  		var usrpromise = users.userSignUp(usr, email, pw, fname, lname, gndr, status, prof, bday);
   		usrpromise.then(function (res)
   		{
   			$scope.status = res;
+					angular.element("#login, #join").hide();
+					angular.element("#logout").show();
   		});
 
 
   	};
 
-			$scope.login = function ()
+  	$scope.login = function ()
   	{
-  		var fname = angular.element("#fnametxt").val();
-  		var lname = angular.element("#lnametxt").val();
-  		var bday = angular.element("#bdaytxt").val();
-  		var gndr = angular.element("#gndrtxt").val();
-  		var status = angular.element("#statustxt").val();
-  		var prof = angular.element("#proftxt").val();
-  		var pw = angular.element("#pwtxt").val();
-				var usr = angular.element("#usrtxt").val();
-  		var email = angular.element("#emailtxt").val();
 
-  		var loginpromise = users.userLogin(usr, pw );
+  		var pw = angular.element("#pwtxt").val();
+  		var usr = angular.element("#usrtxt").val();
+
+  		var loginpromise = users.userLogin(usr, pw);
   		loginpromise.then(function (res)
   		{
-  			$scope.status = res;
+					$scope.status = res;
+					$location.path('/home');
+					angular.element("#login, #join").hide();
   		});
 
 
+
+  	};
+
+  	$scope.logout = function ()
+  	{
+  			Parse.User.logOut();
+					var currentUser = Parse.User.current();
+					$location.path('/home');
+					angular.element("#login, #join").show();
+					angular.element("#logout").hide();
   	};
 
   	$scope.clear = function ()
@@ -166,7 +194,6 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		angular.element("#proftxt").val("");
   		angular.element("#pwtxt").val("");
   		angular.element("#emailtxt").val("");
-
   	};
 
 

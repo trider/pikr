@@ -33,36 +33,80 @@ pikrAppServices.factory('Name', function ()
 		}
 });
 
-pikrAppServices.factory('Submit', function (){
-	return {
-		upload: function (parsePersistence, usr, id, picks, txt){
 
+pikrAppServices.service('Submit', function ($q){
+		
+		this.upload= function (parsePersistence, usr, id, picks, txt ) {
+			
 			var pikrObject = parsePersistence.new('pikrObject');
+			var deferred = $q.defer();
 			parsePersistence.save(pikrObject, { user: usr, pckid: id,  comments: txt, submitted:true});
 			
 			var len = picks.length - 1;
-  	angular.forEach(picks, function (value, index){
+  	
+			angular.forEach(picks, function (value, index){
   		
 				var picksObject = parsePersistence.new('picksObject');
 				var name = angular.element("#" + value.bin).children(1).text()
 				var itm = name.slice(name.indexOf('Item'), name.indexOf(':'));
-				
+
 				parsePersistence.save(picksObject, 
 					{ pckid: id, 
 							item: itm,
 							descrp: name, 
 							val: len - index + 1
-						});		
+						}).then(function(object){ 
+							deferred.resolve(name + " (Saved)");
+					}, function(error) {
+							deferred.rejected(JSON.stringify(error)); 
+					});
 				
 				picksObject.set("parent", pikrObject);
 				picksObject.save();	
+
   	});
-			return " (saved)";	
-		
+			
+			return deferred.promise;
 		}
 		
-	}
+		
+
+
 });
+
+//pikrAppServices.factory('Submit', function (){
+//	return {
+//		upload: function (parsePersistence, usr, id, picks, txt){
+
+//			var pikrObject = parsePersistence.new('pikrObject');
+//			parsePersistence.save(pikrObject, { user: usr, pckid: id,  comments: txt, submitted:true});
+//			
+//			var len = picks.length - 1;
+//  	angular.forEach(picks, function (value, index){
+//  		
+//				var picksObject = parsePersistence.new('picksObject');
+//				var name = angular.element("#" + value.bin).children(1).text()
+//				var itm = name.slice(name.indexOf('Item'), name.indexOf(':'));
+
+
+//				
+//				parsePersistence.save(picksObject, 
+//					{ pckid: id, 
+//							item: itm,
+//							descrp: name, 
+//							val: len - index + 1
+//						});		
+//				
+
+//				picksObject.set("parent", pikrObject);
+//				picksObject.save();	
+//  	});
+//			return " (saved)";	
+//		
+//		}
+//		
+//	}
+//});
 
 
 pikrAppServices.service('Details', function ($q){
@@ -267,6 +311,21 @@ pikrAppServices.service('users', function ($q){
 	
 		return deferred.promise;
 	}  
+
+	this.getUsrStatus= function () {
+			
+			var deferred = $q.defer();
+			var currentUser = Parse.User.current();
+				if (currentUser) {
+								deferred.resolve('Signed in as ' + currentUser.get("username") );
+				} else {
+								deferred.resolve('Not logged in');
+				}
+			
+	
+			return deferred.promise;
+	}  
+
 
 });
 

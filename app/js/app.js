@@ -10,7 +10,7 @@ pikrApp.config(['$routeProvider',
 							.
         when('/pikr', {
         	templateUrl: 'partials/welcome.html',
-        	controller: 'totalCtrl'
+        	controller: 'userCtrl'
         })
 								.when('/pikr/:id', {
 										templateUrl: 'partials/pikr.html',
@@ -40,12 +40,20 @@ pikrApp.config(['$routeProvider',
 										templateUrl: 'partials/totals.html',
 										controller: "totalCtrl"
 								})
+								.when('/totals/:id/:user', {
+										templateUrl: 'partials/totals.html',
+										controller: "totalCtrl"
+								})
 								.when('/user', {
 										templateUrl: 'partials/user.html',
 										controller: "userCtrl"
 								})
 								.when('/login', {
 										templateUrl: 'partials/login.html',
+										controller: "userCtrl"
+								})
+								.when('/logout', {
+										templateUrl: 'partials/logout.html',
 										controller: "userCtrl"
 								})
 								.otherwise({
