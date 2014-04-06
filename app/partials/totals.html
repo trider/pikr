@@ -1,4 +1,10 @@
-<h3>Results</h3>	
+<div class="col-md-9 col-md-offset-1">
+	<h3>Results</h3>	
+<div class="well" ngController="pikrCtrl as pikr">
+	<div class="helptext"><b>Email:</b> {{ params.user }}</div>
+	<div class="helptext"><b>PickID:</b> {{ params.id }}</div>
+	<div class="helptext" id="resultstatus"><b>Status:</b></div>
+</div>
 <form class="form-inline" role="form">
 	<div class="form-group">
 			<input ng-model="pckid" type="text" class="form-control input-sm" id="filter_txt" placeholder="To filter, enter a pckid">
@@ -38,6 +44,4 @@
 					</tbody>
 	</table>
 
-
-	
-
+</div>

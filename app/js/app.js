@@ -34,15 +34,15 @@ pikrApp.config(['$routeProvider',
 								})
 								.when('/totals', {
 										templateUrl: 'partials/totals.html',
-										controller: "totalCtrl"
+										controller: "detailsCtrl"
 								})
 								.when('/totals/:id', {
 										templateUrl: 'partials/totals.html',
-										controller: "totalCtrl"
+										controller: "detailsCtrl"
 								})
 								.when('/totals/:id/:user', {
 										templateUrl: 'partials/totals.html',
-										controller: "totalCtrl"
+										controller: "detailsCtrl"
 								})
 								.when('/user', {
 										templateUrl: 'partials/user.html',

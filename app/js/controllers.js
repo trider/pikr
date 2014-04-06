@@ -13,9 +13,9 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 
 	var promise = users.getUsrStatus();
 	promise.then(function (res)
- {
-  $scope.status = res;
- });		
+	{
+		$scope.status = res;
+	});
 
 
 	//var promise = Details.pckSubmittedStatus(parseQuery, $scope.params);
@@ -35,27 +35,21 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 		$location.path(path);
 	};
 
-	$scope.submit = function ()
+	$scope.submitPick = function ()
 	{
 
 		$scope.message = Name.getName($scope.picks);
 		angular.element("#droptxt").html($scope.name);
 
-		var promise =  Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
+		var promise = Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
 		promise.then(function (res)
 		{
 			$scope.msg = res;
-			$scope.message = $scope.msg
 			//$location.path('/totals/' + $scope.params.id);
-			$location.path('/totals/' + $scope.params.id + '/' + $scope.params.user );
-		
+			$location.path('/totals/' + $scope.params.id + '/' + $scope.params.user);
+			angular.element('#resultstatus').append(' (Saved)');
+
 		});
-
-
-		//$scope.msg = Submit.upload(parsePersistence, $scope.params.user, $scope.params.id, $scope.picks, angular.element("#cmnt_txt").val());
-		//angular.element("#droptxt").append($scope.msg);
-
-		//$location.path('/totals/' + $scope.params.id);
 
 	}
 
@@ -69,14 +63,14 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   	$scope.params = $routeParams;
   	$scope.pcks = pcklst.getPcklst();
 
-  	var promise = Details.getDetails(parseQuery, "pckid");
-  	promise.then(function (res)
+  	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
+  	getDetailsPromise.then(function (res)
   	{
   		$scope.details = res;
   	});
 
-  	var promise2 = Details.getResults(parseQuery, "val");
-  	promise2.then(function (data)
+  	var getResultsPromise = Details.getResults(parseQuery, "val");
+  	getResultsPromise.then(function (data)
   	{
   		$scope.results = data;
   	});
@@ -88,39 +82,32 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 				
 			};
 
-			
-  } ]);
-
-  pikrAppControllers.controller('totalCtrl', ['$scope', 'parseQuery', 'Details', 'pcklst', 'picks', '$location', '$routeParams',
-  function ($scope, parseQuery, Details, pcklst, picks, $location, $routeParams)
-  {
-			$scope.params = $routeParams;
 			$scope.showPck = function ()
 			{
 				var id = angular.element("#pckid_txt").val();
-				var user = angular.element("#email_txt").val();
+				var user = angular.element("#usr_txt").val();
 				$location.path('/pikr/' + id + '/' + user);
 			};
 
 			$scope.pcklst = pcklst.getPcklst({}, function()
 			{
 							
-							var promise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
-							promise.then(function (res)
+							var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
+							getTotalsPromise.then(function (res)
   					{
   						$scope.totals = res;
   					});		
 
-							var promise2 = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
-							promise2.then(function (res)
+							var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
+							countPckrsPromise.then(function (res)
   					{
   						$scope.pckrs = res;
   					});		
 							
 			});
 
+			
   } ]);
-
 
   pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users',
   function ($scope, parseQuery, $location, $routeParams, users)
@@ -132,7 +119,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		$scope.status = res;
   	});
 
-  	$scope.submit = function ()
+  	$scope.userSignup = function ()
   	{
   		var fname = angular.element("#fnametxt").val();
   		var lname = angular.element("#lnametxt").val();

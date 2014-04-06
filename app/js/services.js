@@ -38,33 +38,40 @@ pikrAppServices.service('Submit', function ($q){
 		
 		this.upload= function (parsePersistence, usr, id, picks, txt ) {
 			
-			var pikrObject = parsePersistence.new('pikrObject');
-			var deferred = $q.defer();
-			parsePersistence.save(pikrObject, { user: usr, pckid: id,  comments: txt, submitted:true});
-			
-			var len = picks.length - 1;
-  	
-			angular.forEach(picks, function (value, index){
-  		
-				var picksObject = parsePersistence.new('picksObject');
-				var name = angular.element("#" + value.bin).children(1).text()
-				var itm = name.slice(name.indexOf('Item'), name.indexOf(':'));
-
-				parsePersistence.save(picksObject, 
-					{ pckid: id, 
-							item: itm,
-							descrp: name, 
-							val: len - index + 1
-						}).then(function(object){ 
-							deferred.resolve(name + " (Saved)");
-					}, function(error) {
-							deferred.rejected(JSON.stringify(error)); 
+			var user = Parse.User.current();
+			if (user) {
+					var pikrObject = parsePersistence.new('pikrObject');
+					var deferred = $q.defer();
+					parsePersistence.save(pikrObject, 
+					{		
+							username: user.get("username"), 
+							pckid: id,  
+							comments: txt, 
+							submitted:true
 					});
-				
-				picksObject.set("parent", pikrObject);
-				picksObject.save();	
+					pikrObject.set("user",		user)
 
-  	});
+					var len = picks.length - 1; 	
+					angular.forEach(picks, function (value, index){
+  		
+						var picksObject = parsePersistence.new('picksObject');
+						var name = angular.element("#" + value.bin).children(1).text()
+						var itm = name.slice(name.indexOf('Item'), name.indexOf(':'));
+
+						parsePersistence.save(picksObject, 
+							{ pckid: id, 
+									item: itm,
+									descrp: name, 
+									val: len - index + 1
+								});
+				
+						picksObject.set("parent", pikrObject);
+						picksObject.save();	
+
+  			});
+					deferred.resolve(name + ' (Saved)' );
+					
+				} 
 			
 			return deferred.promise;
 		}
@@ -73,41 +80,6 @@ pikrAppServices.service('Submit', function ($q){
 
 
 });
-
-//pikrAppServices.factory('Submit', function (){
-//	return {
-//		upload: function (parsePersistence, usr, id, picks, txt){
-
-//			var pikrObject = parsePersistence.new('pikrObject');
-//			parsePersistence.save(pikrObject, { user: usr, pckid: id,  comments: txt, submitted:true});
-//			
-//			var len = picks.length - 1;
-//  	angular.forEach(picks, function (value, index){
-//  		
-//				var picksObject = parsePersistence.new('picksObject');
-//				var name = angular.element("#" + value.bin).children(1).text()
-//				var itm = name.slice(name.indexOf('Item'), name.indexOf(':'));
-
-
-//				
-//				parsePersistence.save(picksObject, 
-//					{ pckid: id, 
-//							item: itm,
-//							descrp: name, 
-//							val: len - index + 1
-//						});		
-//				
-
-//				picksObject.set("parent", pikrObject);
-//				picksObject.save();	
-//  	});
-//			return " (saved)";	
-//		
-//		}
-//		
-//	}
-//});
-
 
 pikrAppServices.service('Details', function ($q){
 		this.getResults= function (parseQuery, fld) {
@@ -156,7 +128,7 @@ pikrAppServices.service('Details', function ($q){
 										var pck = 
 										{
 												id: object.id, 
-												user: object.get('user'),
+												user: object.get('username'),
 												pckid: object.get('pckid'),
 												comments: object.get('comments'),
 												created:	object.createdAt
