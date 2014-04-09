@@ -1,0 +1,20 @@
+<div class="row">
+	<div class="helptext col-md-2 col-md-offset-*"><b>User:</b> {{ params.user }}</div>
+	<div class="helptext col-md-2 col-md-offset-*"><b>Pckid:</b> {{ params.id }}</div>
+	<div class="helptext col-md-2 col-md-offset-*"><b>ObjectID:</b> {{ params.parentID }}</div>
+</div>
+<div class="row">
+	<div class="helptext col-md-9 col-md-offset-*">
+			<br>
+			<div class="helptext"><b>Results:</b>
+				<ul>
+					<li ng-repeat="result in results | filter:params.parentID | orderBy:result.Item">{{ result.descrp }} ({{ result.val }}) </li>
+				</ul>
+			</div>
+			<div ng-repeat="detail in details |filter:params.parentID | orderBy:detail.created">
+				<p><b>Comments:</b> {{ detail.comments }}</p>
+				<p><b>Created:</b>{{ detail.created }}</p>	
+		</div>
+	</div>		
+</div>
+<hr>

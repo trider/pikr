@@ -1,0 +1,14 @@
+<div ng-controller="detailsCtrl">
+	<h4>{{ status }}'s picks</h4>
+		<ol>
+			<li ng-repeat="pck in pcklst">
+				<a href="#/pikr/{{ pck.pckid }}/{{ status }}">{{ pck.pckid }}</a> 
+					<span ng-repeat="detail in details |filter:pck.pckid  | filter: status">
+						<span>: submited ({{ detail.submitted }})</span>
+					</span>
+			</li>
+		</ol>
+		<h4>results</h4>
+		<div pckr-Detail></div>
+</div>	
+

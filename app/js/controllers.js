@@ -9,20 +9,27 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 	angular.element("#logout").hide();
 	$scope.params = $routeParams;
 	$scope.picks = picks.getpicks({ id: $scope.params.id });
-	//$scope.message = ' New, not saved';
 
-	var promise = users.getUsrStatus();
-	promise.then(function (res)
+	var getUsrStatusPromise = users.getUsrStatus();
+	getUsrStatusPromise.then(function (res)
+	{
+			$scope.status = res;
+	});
+
+	var getUsrIDPromise = users.getUsrID();
+	getUsrIDPromise.then(function (res)
 	{
 		$scope.status = res;
+
 	});
 
 
-	//var promise = Details.pckSubmittedStatus(parseQuery, $scope.params);
-	//promise.then(function (res)
-	//{
-	//	$scope.message = res;
-	//});
+	var submittedPromise = Details.pckSubmittedStatus(parseQuery, $scope.params);
+	submittedPromise.then(function (res)
+	{
+			//$scope.pckpath = res;
+			$location.path(res);
+	});
 
 
 	$scope.handleDrop = function (item, bin)
@@ -45,10 +52,7 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 		promise.then(function (res)
 		{
 			$scope.msg = res;
-			//$location.path('/totals/' + $scope.params.id);
-			$location.path('/totals/' + $scope.params.id + '/' + $scope.params.user);
-			angular.element('#resultstatus').append(' (Saved)');
-
+			$location.path('/totals/' + $scope.params.id + '/' + $scope.params.user + '/' + res);
 		});
 
 	}
@@ -112,11 +116,22 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users',
   function ($scope, parseQuery, $location, $routeParams, users)
   {
-
+  	
+			angular.element("#loginbox, #join").show();
+			angular.element("#mypicks, #logoutbox, #details, #totals").hide();
+			
 			var stspromise = users.getUsrStatus();
   	stspromise.then(function (res)
   	{
   		$scope.status = res;
+
+				if(res != "nobody")
+				{
+					angular.element("#status").html(res);
+					angular.element("#loginbox, #join").hide();
+					angular.element("#mypicks, #logoutbox, #details, #totals").show();
+				}
+
   	});
 
   	$scope.userSignup = function ()
@@ -136,11 +151,8 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		usrpromise.then(function (res)
   		{
   			$scope.status = res;
-					angular.element("#login, #join").hide();
-					angular.element("#logout").show();
+  			$location.path('/pickr' + usr);
   		});
-
-
   	};
 
   	$scope.login = function ()
@@ -148,26 +160,34 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 
   		var pw = angular.element("#pwtxt").val();
   		var usr = angular.element("#usrtxt").val();
-
   		var loginpromise = users.userLogin(usr, pw);
   		loginpromise.then(function (res)
   		{
+  			$location.path('/pikr/' + usr);
 					$scope.status = res;
-					$location.path('/home');
-					angular.element("#login, #join").hide();
+  			angular.element("#status").html(res);
+  			angular.element("#mypicks").show();
+  			angular.element("#loginbox, #join").hide();
   		});
-
-
 
   	};
 
   	$scope.logout = function ()
   	{
-  			Parse.User.logOut();
-					var currentUser = Parse.User.current();
-					$location.path('/home');
-					angular.element("#login, #join").show();
-					angular.element("#logout").hide();
+  		var logoutpromise = users.userLogout();
+  		logoutpromise.then(function (res)
+  		{
+  			
+					$location.path('/pikr');
+  			$scope.status = res;
+					angular.element("#status").html(res);
+  			angular.element("#loginbox, #join").show();
+					angular.element("#mypicks").hide();
+
+  		});
+
+  		
+
   	};
 
   	$scope.clear = function ()

@@ -1,26 +1,23 @@
-<div class="container">
-<div class="helptext"><p>Please order the following pictures from left to right. Place your favorite picture in the rightmost square, etc.</p></div>
-	<div class="row" >
-		<div class="col-md-3" ng-repeat="pick in picks">
-			<div droppable drop="handleDrop" id="{{ pick.bin }}">
-				<div class="thumbnail" href="#"  draggable id="{{ pick.name }}">
-					<img data-src="holder.js/100%x80" src="{{ pick.imageUrl  }}" class="thumbnail">
-					<div id="{{ pick.name }}caption" class="caption"><b>{{ pick.name }}:</b> {{ pick.description }}</div>
+<div class="row" >
+	<div class="col-md-10 col-md-offset-1">
+		<p>Please order the pictures from left to right. Place your favorite picture in the rightmost square, etc.</p>
+		<div class="row">
+			<div class="col-md-3" ng-repeat="pick in picks">
+					<div droppable drop="handleDrop" id="{{ pick.bin }}">
+						<div class="thumbnail" href="#"  draggable id="{{ pick.name }}">
+							<img data-src="holder.js/100%x80" src="{{ pick.imageUrl  }}" class="thumbnail">
+							<div id="{{ pick.name }}caption" class="caption"><b>{{ pick.name }}:</b> {{ pick.description }}</div>
+					</div>
 				</div>
+			</div>	
 		</div>
-	</div>	
-</div>
-<div class="row col-md-9">
-	<ul class="list-group" id="list">
-			<li class="list-group-item">
-					<label>Comments</label>
-					<textarea class="form-control" rows="1" placeholder="Please type any additional comments here" id="cmnt_txt"></textarea>	
-					<br>
-					<button class="btn btn-danger btn-xs" ng-click="submitPick()">Submit</button>
-					<button class="btn btn-info btn-xs" ng-click="go('/pickr')">Home</button>			
-		</li>
-	</ul>
 	</div>
-</div>
-
-
+	<div class="col-md-7 col-md-offset-1">
+			<textarea class="form-control" rows="2" placeholder="Please type any additional comments here" id="cmnt_txt"></textarea>	
+			<br>
+			<button type="button" class="btn btn-danger btn-xs" ng-click="submitPick()">Submit</button>
+			<button type="button" class="btn btn-info btn-xs" ng-click="go('/pickr')">Home</button>	
+			<br>
+			{{ pckpath }}
+		</div>
+	</div>

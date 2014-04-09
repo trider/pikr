@@ -5,16 +5,12 @@ pikrAppServices.factory('picks', ['$resource', function($resource){
 		getpicks: {method:'GET', params:{ID:'pick'}, isArray:true}
 	});
 }]);
-
 pikrAppServices.factory('pcklst', ['$resource', function($resource){				
 	return $resource('data/pcks.json', {}, {
 		getPcklst: {method:'GET', params:{ID:'pick'}, isArray:true}
 	});
 }]);
-
-
-pikrAppServices.factory('Name', function ()
-{
+pikrAppServices.factory('Name', function (){
 	return {
 		getName: function (picks){
   		var len = picks.length - 1;
@@ -32,8 +28,6 @@ pikrAppServices.factory('Name', function ()
 			}
 		}
 });
-
-
 pikrAppServices.service('Submit', function ($q){
 		
 		this.upload= function (parsePersistence, usr, id, picks, txt ) {
@@ -48,39 +42,36 @@ pikrAppServices.service('Submit', function ($q){
 							pckid: id,  
 							comments: txt, 
 							submitted:true
-					});
-					pikrObject.set("user",		user)
-
-					var len = picks.length - 1; 	
-					angular.forEach(picks, function (value, index){
+						}).then(function(pikrObject) { 
+							
+									pikrObject.set("user",		user)
+									var len = picks.length - 1;
+									deferred.resolve(pikrObject.id);	 	
+									angular.forEach(picks, function (value, index){
   		
-						var picksObject = parsePersistence.new('picksObject');
-						var name = angular.element("#" + value.bin).children(1).text()
-						var itm = name.slice(name.indexOf('Item'), name.indexOf(':'));
+										var picksObject = parsePersistence.new('picksObject');
+										var name = angular.element("#" + value.bin).children(1).text()
+										var itm = name.slice(name.indexOf('Item'), name.indexOf(':'));
 
-						parsePersistence.save(picksObject, 
-							{ pckid: id, 
-									item: itm,
-									descrp: name, 
-									val: len - index + 1
-								});
+										parsePersistence.save(picksObject, 
+											{ pckid: id, 
+													item: itm,
+													descrp: name, 
+													val: len - index + 1
+												});
 				
-						picksObject.set("parent", pikrObject);
-						picksObject.save();	
+									picksObject.set("parent", pikrObject);
+									picksObject.save();	
 
-  			});
-					deferred.resolve(name + ' (Saved)' );
-					
-				} 
-			
-			return deferred.promise;
+  					});
+									
+						}, function(error) {
+								alert(error) ;
+						});
+						return deferred.promise;
+				} 	
 		}
-		
-		
-
-
 });
-
 pikrAppServices.service('Details', function ($q){
 		this.getResults= function (parseQuery, fld) {
 				
@@ -131,6 +122,7 @@ pikrAppServices.service('Details', function ($q){
 												user: object.get('username'),
 												pckid: object.get('pckid'),
 												comments: object.get('comments'),
+												submitted: object.get('submitted').toString(),
 												created:	object.createdAt
 										};
 										pcks.push(pck);
@@ -149,22 +141,29 @@ pikrAppServices.service('Details', function ($q){
 		 } 
 		this.pckSubmittedStatus = function (parseQuery, params){
 
-					var pckid_query = parseQuery.new('pikrObject').equalTo('pckid', params.id);	
-					var user_query = parseQuery.new('pikrObject').equalTo('user', params.user);
-					var query = Parse.Query.or(pckid_query, user_query);
 					var deferred = $q.defer();
+					var currentUser = Parse.User.current();
+					var query = parseQuery.new('pikrObject').equalTo('pckid', params.id);
+					query.containedIn("username", [params.user]);	
+					
+				
+					
 
 						query.count(query).then(function(results) {
-								angular.element("#submit").show();
-								if(results > 0)
-								{									
-											deferred.resolve("You already submitted this Pick.");
-											angular.element("#submit").hide();
+								console.log(params.user + ", " + params.id + ", " + currentUser.id + ", "+ results);
+								
+								if (results == 0){	
+											deferred.resolve('/pikr/' + params.id + '/' + params.user);
+								}
+								else
+								{
+											deferred.resolve('/usrmsg');
 								}
 
-
+								
+																	
 						}, function(error) {
-								deferred.rejected(JSON.stringify(error));
+								//deferred.rejected(JSON.stringify(error));
 						});
 
 						return deferred.promise;
@@ -189,8 +188,7 @@ pikrAppServices.service('Details', function ($q){
 																		if(value.pckid == object.get('pckid') && items[j] == object.get('item')){
 																					val += 	object.get('val');				
 																					desc = object.get('descrp');
-																		}	
-																		
+																		}		
 															}
 																		
 															total.push({
@@ -238,10 +236,8 @@ pikrAppServices.service('Details', function ($q){
 			}
 
 });
-
-pikrAppServices.service('users', function ($q){
-		
-		this.userSignUp= function (usr, email, pw, fname, lname, gndr, status, prof, bday ) {
+pikrAppServices.service('users', function ($q){		
+	this.userSignUp= function (usr, email, pw, fname, lname, gndr, status, prof, bday ) {
 			
 			var user = new Parse.User();
 			
@@ -267,14 +263,13 @@ pikrAppServices.service('users', function ($q){
 			});
 			
 			return deferred.promise;
-		}
-		
-		this.userLogin= function (usr, pw) {
+		}	
+	this.userLogin= function (usr, pw) {
 			
 			var deferred = $q.defer();
 			Parse.User.logIn(usr, pw, {
 			success: function(user) {
-					deferred.resolve('Logged in: ' + usr );	
+					deferred.resolve( usr );	
 			},
 			error: function(user, error) {
 					alert("Error: " + error.code + " " + error.message);
@@ -284,29 +279,40 @@ pikrAppServices.service('users', function ($q){
 		return deferred.promise;
 	}  
 
+	this.userLogout= function () {
+			
+			var deferred = $q.defer();
+		
+			Parse.User.logOut()
+			var currentUser = Parse.User.current();
+				if (currentUser) {
+								deferred.resolve(currentUser.get("username") );
+				} else {
+								deferred.resolve('nobody');
+				}
+	
+		return deferred.promise;
+	}  
+
 	this.getUsrStatus= function () {
 			
 			var deferred = $q.defer();
 			var currentUser = Parse.User.current();
 				if (currentUser) {
-								deferred.resolve('Signed in as ' + currentUser.get("username") );
+								deferred.resolve(currentUser.get("username") );
 				} else {
-								deferred.resolve('Not logged in');
+								deferred.resolve('nobody');
 				}
 			
-	
 			return deferred.promise;
-	}  
-
-
+	}
+	this.getUsrID =  function () {
+			
+			var deferred = $q.defer();
+			var currentUser = Parse.User.current();
+			if (currentUser) {
+							deferred.resolve(currentUser.id );
+			} 
+			return deferred.promise;
+	}    
 });
-
-
-
-
-
-
-
-
-
-

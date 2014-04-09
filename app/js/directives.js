@@ -31,7 +31,6 @@ pikrAppDirectives.directive('draggable', function ()
 		}, false);
 	}
 });
-
 pikrAppDirectives.directive('droppable', function ()
 {
 	return {
@@ -102,6 +101,14 @@ pikrAppDirectives.directive('pckrDetails', function ()
 	};
 });
 
+pikrAppDirectives.directive('pckrDetail', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/detail.html'
+	};
+});
+
 pikrAppDirectives.directive('pckrTotals', function ()
 {
 	return {
@@ -142,10 +149,42 @@ pikrAppDirectives.directive('pckLogin', function ()
 	};
 });
 
+pikrAppDirectives.directive('pckLogout', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/logout.html'
+	};
+});
+
 pikrAppDirectives.directive('pckStatus', function ()
 {
 	return {
 		transclude: true,
 		templateUrl: 'partials/status.html'
+	};
+});
+
+pikrAppDirectives.directive('pckData', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/pickdata.html'
+	};
+});
+
+pikrAppDirectives.directive('pckLogo', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/logo.html'
+	};
+});
+
+pikrAppDirectives.directive('pckMypcks', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/mypcks.html'
 	};
 });
