@@ -1,17 +1,10 @@
-<!--<div class="row">
-	<div class="col-md-7 col-md-offset-1">
-					<div class="page-header">
-								<h2>Join Pikr</h2>
-						</div>
-				</div>
-</div>-->
 <div class="row">
 	<form role="form">
 				<div class="row">
 						<div class="col-md-3 col-md-offset-1">
 							<div class="form-group">
-							<label>User name</label>
-							<input type="text" class="form-control" id="usrtxt" placeholder="User name">
+							<label for="usrnametxt">User name</label>
+							<input type="text" class="form-control" id="usrnametxt" placeholder="User name">
 						</div>
 							<div class="form-group">
 									<label for="emailtxt">Email address</label>
@@ -21,7 +14,7 @@
 					<div class="col-md-3 col-md-offset-1">
 						<div class="form-group">
 								<label for="pwtxt">Password</label>
-								<input type="password" class="form-control" id="pwtxt" placeholder="Password">
+								<input type="password" class="form-control" id="usrpwtxt" placeholder="Password">
 						</div>
 					</div>
 				</div>
@@ -57,8 +50,8 @@
 												<option>Female</option>
 									</select>
 								</div>
-								<button type="submit" class="btn btn-default" ng-click="userSignup()">Submit</button>
-								<button type="submit" class="btn btn-default" ng-click="clear()">Clear</button>
+								<button class="btn btn-default" ng-click="userSignup()">Submit</button>
+								<button class="btn btn-default" ng-click="clear()">Clear</button>
 						</div>
 					<div class="col-md-3 col-md-offset-1">
 						<div class="form-group">

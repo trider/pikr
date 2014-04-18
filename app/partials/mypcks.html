@@ -1,5 +1,5 @@
 <div ng-controller="detailsCtrl">
-	<h4>{{ status }}'s picks</h4>
+	<h4>{{ status }}'s picks list</h4>
 		<ol>
 			<li ng-repeat="pck in pcklst">
 				<a href="#/pikr/{{ pck.pckid }}/{{ status }}">{{ pck.pckid }}</a> 
@@ -8,7 +8,6 @@
 					</span>
 			</li>
 		</ol>
-		<h4>results</h4>
-		<div pckr-Detail></div>
+		<!--<div pckr-Detail></div>-->
 </div>	
 

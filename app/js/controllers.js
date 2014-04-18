@@ -6,7 +6,7 @@ pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$locat
 function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users)
 {
 
-	angular.element("#logout").hide();
+	angular.element("#logout, #usrmsg").hide();
 	$scope.params = $routeParams;
 	$scope.picks = picks.getpicks({ id: $scope.params.id });
 
@@ -27,7 +27,6 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 	var submittedPromise = Details.pckSubmittedStatus(parseQuery, $scope.params);
 	submittedPromise.then(function (res)
 	{
-			//$scope.pckpath = res;
 			$location.path(res);
 	});
 
@@ -52,7 +51,8 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 		promise.then(function (res)
 		{
 			$scope.msg = res;
-			$location.path('/totals/' + $scope.params.id + '/' + $scope.params.user + '/' + res);
+			//$location.path('/totals/' + $scope.params.id + '/' + $scope.params.user + '/' + res);
+			$location.path('/pikr/' + $scope.params.user );
 		});
 
 	}
@@ -64,13 +64,16 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams)
   {
 
+  	angular.element("#usrmsg").hide();
   	$scope.params = $routeParams;
   	$scope.pcks = pcklst.getPcklst();
+			$scope.filters = ["Male", "Female"];
 
   	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
   	getDetailsPromise.then(function (res)
   	{
   		$scope.details = res;
+  		$scope.orderProp = 'user';
   	});
 
   	var getResultsPromise = Details.getResults(parseQuery, "val");
@@ -79,46 +82,61 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		$scope.results = data;
   	});
 
-			$scope.go = function (path)
-			{
-				
-				$location.path(path);
-				
-			};
+  	$scope.resultsBy = function ()
+  	{
+  		var val = angular.element("#resultsBy").val();
+				var getStatsPromise = Details.pckStats(parseQuery, "gender", val);
+  			getStatsPromise.then(function (data)
+  			{
+  				$scope.stats = data;
 
-			$scope.showPck = function ()
-			{
-				var id = angular.element("#pckid_txt").val();
-				var user = angular.element("#usr_txt").val();
-				$location.path('/pikr/' + id + '/' + user);
-			};
-
-			$scope.pcklst = pcklst.getPcklst({}, function()
-			{
-							
-							var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
-							getTotalsPromise.then(function (res)
+						var usrStatsPromise = Details.pckUsrStats(parseQuery, "gender", val);
+  					usrStatsPromise.then(function (res)
   					{
-  						$scope.totals = res;
-  					});		
+  						$scope.usrstats = res;
+							});
+	
+					});
+  	};
 
-							var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
-							countPckrsPromise.then(function (res)
-  					{
-  						$scope.pckrs = res;
-  					});		
-							
-			});
+  	$scope.go = function (path)
+  	{
 
-			
+  		$location.path(path);
+
+  	};
+  	$scope.showPck = function ()
+  	{
+  		var id = angular.element("#pckid_txt").val();
+  		var user = angular.element("#usr_txt").val();
+  		$location.path('/pikr/' + id + '/' + user);
+  	};
+  	$scope.pcklst = pcklst.getPcklst({}, function ()
+  	{
+
+  		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
+  		getTotalsPromise.then(function (res)
+  		{
+  			$scope.totals = res;
+  		});
+
+  		var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
+  		countPckrsPromise.then(function (res)
+  		{
+  			$scope.pckrs = res;
+  		});
+
+  	});
+
+
   } ]);
 
   pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users',
   function ($scope, parseQuery, $location, $routeParams, users)
   {
   	
-			angular.element("#loginbox, #join").show();
-			angular.element("#mypicks, #logoutbox, #details, #totals").hide();
+			angular.element("#loginbox, #join, #intro").show();
+			angular.element("#mypicks, #logoutbox, #details, #totals, #usrmsg").hide();
 			
 			var stspromise = users.getUsrStatus();
   	stspromise.then(function (res)
@@ -128,7 +146,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 				if(res != "nobody")
 				{
 					angular.element("#status").html(res);
-					angular.element("#loginbox, #join").hide();
+					angular.element("#loginbox, #join, #intro").hide();
 					angular.element("#mypicks, #logoutbox, #details, #totals").show();
 				}
 
@@ -141,17 +159,18 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		var gndr = angular.element("#gndrtxt").val();
   		var status = angular.element("#statustxt").val();
   		var prof = angular.element("#proftxt").val();
-  		var pw = angular.element("#pwtxt").val();
-  		var usr = angular.element("#usrtxt").val();
+  		var pw = angular.element("#usrpwtxt").val();
+  		var usr = angular.element("#usrnametxt").val();
   		var email = angular.element("#emailtxt").val();
 
   		var bday = new Date(angular.element("#bdaytxt").val())
 
   		var usrpromise = users.userSignUp(usr, email, pw, fname, lname, gndr, status, prof, bday);
-  		usrpromise.then(function (res)
+  		
+				usrpromise.then(function (res)
   		{
   			$scope.status = res;
-  			$location.path('/pickr' + usr);
+  			$location.path('/pikr/' + res);
   		});
   	};
 
@@ -183,7 +202,8 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 					angular.element("#status").html(res);
   			angular.element("#loginbox, #join").show();
 					angular.element("#mypicks").hide();
-
+					angular.element("#usrtxt, #pwtxt").val('');
+					
   		});
 
   		

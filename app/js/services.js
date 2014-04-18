@@ -73,6 +73,9 @@ pikrAppServices.service('Submit', function ($q){
 		}
 });
 pikrAppServices.service('Details', function ($q){
+		
+		
+		
 		this.getResults= function (parseQuery, fld) {
 				
 			var query = parseQuery.new('picksObject');	
@@ -138,16 +141,72 @@ pikrAppServices.service('Details', function ($q){
 
 			return deferred.promise;
 
-		 } 
+		 } 			
+		this.pckStats = function (parseQuery, fld, val){
+
+					var innerQuery = parseQuery.new('User').equalTo(fld, val);
+					var query = parseQuery.new('pikrObject').equalTo("pckid", "pck0001");  
+					query.matchesQuery("user", innerQuery);
+
+					var deferred = $q.defer();
+					query.select("username", "pckid");
+				
+					query.find(query).then(function(results) {
+						var result = new Array();
+						for (var i = 0; i < results.length; i++) { 
+										var object = results[i];
+										var res = 
+										{
+												id: object.id,
+												pckid: object.get('pckid'),
+												username: object.get('username')
+										};
+										result.push(res);
+
+						}
+								
+								deferred.resolve(result);
+						});
+
+					return deferred.promise;
+
+		}
+		this.pckUsrStats = function (parseQuery, fld, val){
+
+				var innerQuery = parseQuery.new('User').equalTo(fld, val);
+				var query = parseQuery.new('picksObject').equalTo("pckid", "pck0001"); 
+				query.matchesQuery("user", innerQuery);
+
+				var deferred = $q.defer();
+				
+					query.find(query).then(function(results) {
+						var result = new Array();
+						for (var i = 0; i < results.length; i++) { 
+										var object = results[i];
+										var res = 
+										{
+												id:		object.id,
+												item: object.get('item'),
+												val: object.get('val')
+										};
+										result.push(res);
+								}
+								
+								deferred.resolve(result);
+						});
+
+
+					return deferred.promise;
+				
+		}
+	
+		
 		this.pckSubmittedStatus = function (parseQuery, params){
 
 					var deferred = $q.defer();
 					var currentUser = Parse.User.current();
 					var query = parseQuery.new('pikrObject').equalTo('pckid', params.id);
 					query.containedIn("username", [params.user]);	
-					
-				
-					
 
 						query.count(query).then(function(results) {
 								console.log(params.user + ", " + params.id + ", " + currentUser.id + ", "+ results);
@@ -159,9 +218,7 @@ pikrAppServices.service('Details', function ($q){
 								{
 											deferred.resolve('/usrmsg');
 								}
-
 								
-																	
 						}, function(error) {
 								//deferred.rejected(JSON.stringify(error));
 						});
@@ -169,7 +226,6 @@ pikrAppServices.service('Details', function ($q){
 						return deferred.promise;
 
 		}
-		
 		this.getTotals = function (parseQuery, pcklst, fld){
 
 				var query = parseQuery.new('picksObject').ascending(fld);	
@@ -209,7 +265,6 @@ pikrAppServices.service('Details', function ($q){
 							return deferred.promise;	
 					
 			}	
-
 			this.countPckrs = function(parseQuery, pcklst, fld)
 			{
 				
@@ -224,7 +279,7 @@ pikrAppServices.service('Details', function ($q){
 											
 	
 						}, function(error) {
-								deferred.rejected(JSON.stringify(error));
+								console.log(JSON.stringify(error));
 						});
 
 						deferred.resolve(total);			
@@ -254,8 +309,7 @@ pikrAppServices.service('users', function ($q){
 			var deferred = $q.defer();
 			user.signUp(null, {
 					success: function(user) {
-							deferred.resolve('Created user: ' + fname + ', ' + lname + ', ' + usr + ', ' 
-									+ bday + ', ' + gndr + ', ' + status + ', ' + prof + ', ' + pw + ', ' + email);	
+							deferred.resolve(user.get('username'));	
 					},
 					error: function(user, error) {
 							alert("Error: " + error.code + " " + error.message);

@@ -188,3 +188,11 @@ pikrAppDirectives.directive('pckMypcks', function ()
 		templateUrl: 'partials/mypcks.html'
 	};
 });
+
+pikrAppDirectives.directive('pckMsg', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/usrmsg.html'
+	};
+});

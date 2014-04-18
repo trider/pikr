@@ -1,36 +1,35 @@
 <div class="row">
 		<div class="col-md-9 col-md-offset-1">
+				<div id="intro">
 					<div class="page-header">
-						<h1>Welcome to Pikr</h1>
-						<div class="helptext">Making hard decisions easier.</div>
+							<h1>Welcome to Pikr</h1>
+							<div class="helptext">Making hard decisions easier.</div>
+					</div>
+					<p>Pikr is a service that helps you make choices with the help of your family, friends, and social circle. 
+					Pikr not only helps you make informed choices, it also lets you analyze your friends choices, and gain important insights.</p>
+					<div pck-Logo></div>
+					<p>If you are not a Pikr member, click <a href="#/user" id="join">here</a> to join. Otherwise, please type your user name and password in the textboxes above.</p>
+
+					<!--<p>All you need to do is upload some pictures, tell your friends that you created a new pick, and ask them 
+						to order them from left to right.</p>-->
 				</div>
-				<p>Pikr is a service that helps you make choices with the help of your family, friends, and social circle. 
-				Pikr not only helps you make informed choices, it also lets you analyze your friends choices, and gain important insights.</p>
-				<div pck-Logo></div>
-				<p>All you need to do is upload some pictures, tell your friends that you created a new pick, and ask them 
-					to order them from left to right.</p>
 			</div>
 	</div>
+<div pck-Msg ng-controller="detailsCtrl" id="usrmsg"></div>
 <div class="row">
-		<div class="col-md-3 col-md-offset-1">
+		<div class="col-md-8 col-md-offset-1">
 				<ul class="list-group">
-					<li class="list-group-item" id="loginbox">
-						<div pck-Login></div>
-					</li>
-					<li class="list-group-item" id="logoutbox">
-						<div pck-Logout></div>
-					</li>
-				</ul>
-			</div>
-			<div class="col-md-6 col-md-offset-*">
 					<li class="list-group-item" id="mypicks">
 							<div pck-Mypcks ng-controller="detailsCtrl"></div>
 					</li>
-				</ul>
+			</ul>
 			</div>
+			<div class="col-md-8 col-md-offset-1">
+					<ul class="list-group">
+						<li class="list-group-item" id="mypicks">
+								<div pckr-Detail ng-controller="detailsCtrl"></div>
+						</li>
+					</ul>
+			</div>
+	</div>
 </div>
-
-
-
-	
-	
