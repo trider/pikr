@@ -1,45 +1,41 @@
 <div class="row"	>
 <div class="col-md-10 col-md-offset-1">
 		<h2>Detailed results for {{ params.id }} by</h2>
-		<!--<div pckr-Filter></div>-->
-		<div class="col-md-10 col-md-offset-*">
-			<p ng-repeat="usrTotal in usrTotals | filter:params.id ">
-		 {{ usrTotal.pckid }}, {{ usrTotal.item }}, {{ usrTotal.val }}
-		</p>
-		<hr>
-		</div>
-		<form class="form-horizontal">
-					<div class="col-md-4">
-						<div class="form-group">
-						<label class="control-label col-md-2">Gender</label>	
-						<div class="col-md-4 col-md-offset-*">
-											<select class="form-control" id="resultsBy" >
-												<option ng-repeat="filter in filters">{{ filter }}</option>
-											</select>
-										</div>
-									<button type="submit" class="btn btn-default" ng-click="resultsBy()">Change</button>					
-						</div>			
-					</div>
-		</form>
-			</div>
 	</div>
-		<div class="col-md-10 col-md-offset-1">
-		<!--<p ng-repeat="stat in stats">
-				{{ stat.pckid }}, {{ stat.username }}
-				<span ng-repeat="usrstat in usrstats">
-					{{ usrstat.item }}({{ usrstat.val }}) 
-				</span>
-		</p>-->
-		<p ng-repeat="stat in stats">
-				{{ stat.pckid }}, {{ stat.username }}
-				<span ng-repeat="usrstat in usrstats">
-					{{ usrstat.item }}({{ usrstat.val }}) 
-				</span>
+</div>
+<div class="row">
+	<div class="well col-md-10 col-md-offset-1">
+		<div class="col-md-3 col-md-offset-*">
+			<h4>Gender</h4>
+					Male: 
+				<span ng-repeat="usrMTotal in usrMTotals | filter:params.id">		
+				{{ usrMTotal.item }}, {{ usrMTotal.val }}
+			</span>
+		</p>
+				Female:
+				<span ng-repeat="usrFTotal in usrFTotals | filter:params.id">		
+				{{ usrFTotal.item }}, {{ usrFTotal.val }}
+			</span>
 		</p>
 	</div>
+	<div class="col-md-3 col-md-offset-*">
+			<h4>Status</h4>
+					Single: 
+				<span ng-repeat="usrSngTotal in usrSngTotals | filter:params.id">		
+				{{ usrSngTotal.item }}, {{ usrSngTotal.val }}
+			</span>
+		</p>
+				Married:
+				<span ng-repeat="usrMrdTotal in usrMrdTotals | filter:params.id">		
+				{{ usrMrdTotal.item }}, {{ usrMrdTotal.val }}
+			</span>
+		</p>
+	</div>
+	</div>
+</div>
 <div class="row"	>
 		<div class="col-md-10 col-md-offset-1">
-			<hr>
+		<h4>User</h4>
 			<div class="table-responsive" ng-controller="detailsCtrl">
 				<table class="table table-hover table-condensed">
 							<thead>
@@ -59,7 +55,7 @@
 											<td>{{ detail.user }}</td>
 											<td>{{ detail.pckid }}</td>
 											<td>
-																<p ng-repeat="result in results | filter:detail.id">
+																<p ng-repeat="result in results | filter:detail.id | orderBy:orderProp">
 																		{{ result.descrp }} ({{ result.val }})
 																</p>
 											</td>

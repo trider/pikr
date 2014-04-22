@@ -44,7 +44,7 @@ pikrAppServices.service('Submit', function ($q){
 							submitted:true
 						}).then(function(pikrObject) { 
 							
-									pikrObject.set("user",		user)
+									pikrObject.set("user",		user);
 									var len = picks.length - 1;
 									deferred.resolve(pikrObject.id);	 	
 									angular.forEach(picks, function (value, index){
@@ -61,7 +61,9 @@ pikrAppServices.service('Submit', function ($q){
 												});
 				
 									picksObject.set("parent", pikrObject);
+									picksObject.set("user",		user);
 									picksObject.save();	
+									deferred.resolve(pikrObject.id);	
 
   					});
 									
@@ -89,7 +91,7 @@ pikrAppServices.service('Details', function ($q){
 										var res = 
 										{
 												id: object.id, 
-												parent: object.get('parent').id,
+												parent: object.get('parent'),
 												pckid: object.get('pckid'),
 												item: object.get('item'),
 												descrp: object.get('descrp'),
@@ -197,6 +199,48 @@ pikrAppServices.service('Details', function ($q){
 
 
 					return deferred.promise;
+				
+		}
+
+		this.pckUsrStatsVals = function (parseQuery, pcklst, fld, val){
+
+				var innerQuery = parseQuery.new('User').equalTo(fld, val);
+				var query = parseQuery.new('picksObject').descending('item'); 
+				query.matchesQuery("user", innerQuery);
+				var total = new Array();
+				var deferred = $q.defer();
+								query.find(query).then(function(results) {
+												
+										angular.forEach(pcklst, function(value, key){
+												var items = value.items;
+
+												for (var j = 0; j < items.length; j++) { 
+															var val = 0;
+															var desc;
+															for (var i = 0; i < results.length; i++) { 
+																		var object = results[i];	
+																		if(items[j] == object.get('item')){
+																					val += 	object.get('val');				
+																					desc = object.get('descrp');
+																		}		
+															}
+																		
+															total.push({
+																pckid: value.pckid,
+																item: items[j],
+																val: val, 
+																descrp: desc
+														});
+														
+											}
+						
+											deferred.resolve(total);
+	
+									});
+																					
+							});
+
+				return deferred.promise;
 				
 		}
 	

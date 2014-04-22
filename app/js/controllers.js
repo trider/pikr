@@ -115,8 +115,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   	{
 
   		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
-  		getTotalsPromise.then(function (res)
-  		{
+  		getTotalsPromise.then(function (res){
   			$scope.totals = res;
   		});
 
@@ -124,6 +123,30 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		countPckrsPromise.then(function (res)
   		{
   			$scope.pckrs = res;
+  		});
+
+				var pckUsrMValsPromise = Details.pckUsrStatsVals(parseQuery, $scope.pcklst, "gender", "Male");
+  		pckUsrMValsPromise.then(function (res)
+  		{
+  			$scope.usrMTotals = res;
+  		});
+
+				var pckUsrFValsPromise = Details.pckUsrStatsVals(parseQuery, $scope.pcklst, "gender", "Female");
+  		pckUsrFValsPromise.then(function (res)
+  		{
+  			$scope.usrFTotals = res;
+  		});
+
+				var pckUsrSngValsPromise = Details.pckUsrStatsVals(parseQuery, $scope.pcklst, "status", "Single");
+  		pckUsrSngValsPromise.then(function (res)
+  		{
+  			$scope.usrSngTotals = res;
+  		});
+
+				var pckUsrMrdValsPromise = Details.pckUsrStatsVals(parseQuery, $scope.pcklst, "status", "Married");
+  		pckUsrMrdValsPromise.then(function (res)
+  		{
+  			$scope.usrMrdTotals = res;
   		});
 
   	});
