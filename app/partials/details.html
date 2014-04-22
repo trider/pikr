@@ -3,67 +3,32 @@
 		<h2>Detailed results for {{ params.id }} by</h2>
 	</div>
 </div>
-<div class="row">
-	<div class="well col-md-10 col-md-offset-1">
-		<div class="col-md-3 col-md-offset-*">
-			<h4>Gender</h4>
-					Male: 
-				<span ng-repeat="usrMTotal in usrMTotals | filter:params.id">		
-				{{ usrMTotal.item }}, {{ usrMTotal.val }}
-			</span>
-		</p>
-				Female:
-				<span ng-repeat="usrFTotal in usrFTotals | filter:params.id">		
-				{{ usrFTotal.item }}, {{ usrFTotal.val }}
-			</span>
-		</p>
-	</div>
-	<div class="col-md-3 col-md-offset-*">
-			<h4>Status</h4>
-					Single: 
-				<span ng-repeat="usrSngTotal in usrSngTotals | filter:params.id">		
-				{{ usrSngTotal.item }}, {{ usrSngTotal.val }}
-			</span>
-		</p>
-				Married:
-				<span ng-repeat="usrMrdTotal in usrMrdTotals | filter:params.id">		
-				{{ usrMrdTotal.item }}, {{ usrMrdTotal.val }}
-			</span>
-		</p>
-	</div>
-	</div>
-</div>
 <div class="row"	>
-		<div class="col-md-10 col-md-offset-1">
-		<h4>User</h4>
-			<div class="table-responsive" ng-controller="detailsCtrl">
-				<table class="table table-hover table-condensed">
-							<thead>
-									<tr>
-											<!--<th>id</th>-->
-											<th>user</th>
-											<th>pckid</th>
-											<th>results</th>
-											<th>comments</th>
-											<th>created</th>
-											<th>submitted</th>
-									</tr>
-							</thead>
-							<tbody ng-repeat="detail in details | filter:params.id | orderBy:orderProp">
-									<tr>
-											<!--<td>{{ detail.id }}</td>-->
-											<td>{{ detail.user }}</td>
-											<td>{{ detail.pckid }}</td>
-											<td>
-																<p ng-repeat="result in results | filter:detail.id | orderBy:orderProp">
-																		{{ result.descrp }} ({{ result.val }})
-																</p>
-											</td>
-											<td>{{ detail.comments }}</td>
-											<td>{{ detail.created }}</td>
-											<td>{{ detail.submitted }}</td>
-									</tr>
-							</tbody>
+		<div class="col-md-7 col-md-offset-1">
+		<div pck-ResultsBy></div>
+		<div class="table-responsive" ng-controller="detailsCtrl">
+			<table class="table table-hover table-condensed">
+						<thead>
+								<tr>
+										<!--<th>id</th>-->
+										<th>user</th>
+										<th>results</th>
+										<th>comments</th>
+										<!--<th>created</th>
+										<th>submitted</th>-->
+								</tr>
+						</thead>
+						<tbody ng-repeat="detail in details | filter:params.id | orderBy:orderProp">
+								<tr>
+										<td>{{ detail.user }}</td>
+										<td>
+															<p ng-repeat="result in results | filter:detail.id | orderBy:orderProp">
+																	{{ result.descrp }} ({{ result.val }})
+															</p>
+										</td>
+										<td>{{ detail.comments }}</td>
+								</tr>
+						</tbody>
 			</table>
 		</div>
 	</div>

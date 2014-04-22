@@ -67,7 +67,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   	angular.element("#usrmsg").hide();
   	$scope.params = $routeParams;
   	$scope.pcks = pcklst.getPcklst();
-			$scope.filters = ["Male", "Female"];
+  	$scope.filters = ["Male", "Female"];
 
   	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
   	getDetailsPromise.then(function (res)
@@ -82,23 +82,6 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		$scope.results = data;
   	});
 
-  	$scope.resultsBy = function ()
-  	{
-  		var val = angular.element("#resultsBy").val();
-				var getStatsPromise = Details.pckStats(parseQuery, "gender", val);
-  			getStatsPromise.then(function (data)
-  			{
-  				$scope.stats = data;
-
-						var usrStatsPromise = Details.pckUsrStats(parseQuery, "gender", val);
-  					usrStatsPromise.then(function (res)
-  					{
-  						$scope.usrstats = res;
-							});
-	
-					});
-  	};
-
   	$scope.go = function (path)
   	{
 
@@ -111,11 +94,11 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		var user = angular.element("#usr_txt").val();
   		$location.path('/pikr/' + id + '/' + user);
   	};
-  	$scope.pcklst = pcklst.getPcklst({}, function ()
-  	{
+  	$scope.pcklst = pcklst.getPcklst({}, function (){
 
   		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
-  		getTotalsPromise.then(function (res){
+  		getTotalsPromise.then(function (res)
+  		{
   			$scope.totals = res;
   		});
 
@@ -125,31 +108,66 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   			$scope.pckrs = res;
   		});
 
-				var pckUsrMValsPromise = Details.pckUsrStatsVals(parseQuery, $scope.pcklst, "gender", "Male");
+  		var pckUsrMValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "gender", 'Male');
   		pckUsrMValsPromise.then(function (res)
   		{
-  			$scope.usrMTotals = res;
+  			$scope.usrMVals = res;
   		});
-
-				var pckUsrFValsPromise = Details.pckUsrStatsVals(parseQuery, $scope.pcklst, "gender", "Female");
+				var pckUsrMCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "gender", 'Male');
+  		pckUsrMCntPromise.then(function (res)
+  		{
+  			$scope.usrMCnts = res;
+  		});
+				var pckUsrFValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "gender", 'Female');
   		pckUsrFValsPromise.then(function (res)
   		{
-  			$scope.usrFTotals = res;
+  			$scope.usrFVals = res;
+  		});
+				var pckUsrFCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "gender", 'Female');
+  		pckUsrFCntPromise.then(function (res)
+  		{
+  			$scope.usrFCnts = res;
   		});
 
-				var pckUsrSngValsPromise = Details.pckUsrStatsVals(parseQuery, $scope.pcklst, "status", "Single");
+				var pckUsrSngValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "status", 'Single');
   		pckUsrSngValsPromise.then(function (res)
   		{
-  			$scope.usrSngTotals = res;
+  			$scope.usrSngVals = res;
   		});
-
-				var pckUsrMrdValsPromise = Details.pckUsrStatsVals(parseQuery, $scope.pcklst, "status", "Married");
+				var pckUsrSngCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "status", 'Single');
+  		pckUsrSngCntPromise.then(function (res)
+  		{
+  			$scope.usrSngCnts = res;
+  		});
+				var pckUsrMrdValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "status", 'Married');
   		pckUsrMrdValsPromise.then(function (res)
   		{
-  			$scope.usrMrdTotals = res;
+  			$scope.usrMrdVals = res;
+  		});
+				var pckUsrMrdCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "status", 'Married');
+  		pckUsrMrdCntPromise.then(function (res)
+  		{
+  			$scope.usrMrdCnts = res;
   		});
 
+  		//$scope.resultsBy = function ()
+  		//{
+  		//	
+  		//	var pckUsrValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "gender", val);
+  		//	pckUsrValsPromise.then(function (res)
+  		//	{
+  		//		$scope.usrTotals = res;
+  		//	});
+				//	var pckUsrCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "gender", val);
+  		//		pckUsrCntPromise.then(function (res)
+  		//		{
+  		//			$scope.usrCnts = res;
+  		//		});
+  		//};
+
   	});
+
+
 
 
   } ]);

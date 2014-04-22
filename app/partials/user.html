@@ -1,20 +1,20 @@
 <div class="row">
-	<form role="form">
+	<form role="form" class="form-horizontal">
 				<div class="row">
 						<div class="col-md-3 col-md-offset-1">
 							<div class="form-group">
 							<label for="usrnametxt">User name</label>
-							<input type="text" class="form-control" id="usrnametxt" placeholder="User name">
+							<input type="text" class="form-control" id="usrnametxt" placeholder="User name" tabindex="1">
 						</div>
 							<div class="form-group">
 									<label for="emailtxt">Email address</label>
-									<input type="email" class="form-control" id="emailtxt" placeholder="Email">
+									<input type="email" class="form-control" id="emailtxt" placeholder="Email" tabindex="2">
 							</div>
 						</div>
 					<div class="col-md-3 col-md-offset-1">
 						<div class="form-group">
 								<label for="pwtxt">Password</label>
-								<input type="password" class="form-control" id="usrpwtxt" placeholder="Password">
+								<input type="password" class="form-control" id="usrpwtxt" placeholder="Password" tabindex="3">
 						</div>
 					</div>
 				</div>
@@ -23,21 +23,21 @@
 				<div class="col-md-3 col-md-offset-1">
 						<div class="form-group">
 							<label>First name</label>
-							<input type="text" class="form-control" id="fnametxt" placeholder="First name">
+							<input type="text" class="form-control" id="fnametxt" placeholder="First name" tabindex="4">
 						</div>
 						<div class="form-group">
 							<label>Date of birth</label>
-							<input type="date" class="form-control" id="bdaytxt" placeholder="Date of birth">
+							<input type="date" class="form-control" id="bdaytxt" placeholder="Date of birth" tabindex="6">
 						</div>
 					</div>
 				<div class="col-md-3 col-md-offset-1">
 						<div class="form-group">
 							<label>Last name</label>
-							<input type="text" class="form-control" id="lnametxt" placeholder="Last name">
+							<input type="text" class="form-control" id="lnametxt" placeholder="Last name" tabindex="5">
 						</div>
 						<div class="form-group">
 							<label>Profession</label>
-							<input type="text" class="form-control" id="proftxt" placeholder="Profession">
+							<input type="text" class="form-control" id="proftxt" placeholder="Profession" tabindex="7">
 						</div>
 					</div>
 				</div>
@@ -50,14 +50,14 @@
 												<option>Female</option>
 									</select>
 								</div>
-								<button class="btn btn-default" ng-click="userSignup()">Submit</button>
-								<button class="btn btn-default" ng-click="clear()">Clear</button>
+								<button class="btn btn-default" ng-click="userSignup()" tabindex="9" >Submit</button>
+								<button class="btn btn-default" ng-click="clear()" tabindex="10">Clear</button>
 						</div>
 					<div class="col-md-3 col-md-offset-1">
 						<div class="form-group">
 								<div class="form-group">
 									<label>Status</label>
-									<select class="form-control" id="statustxt">
+									<select class="form-control" id="statustxt" tabindex="8">
 											<option>Married</option>
 											<option>Single</option>
 									</select>

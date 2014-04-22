@@ -196,3 +196,12 @@ pikrAppDirectives.directive('pckMsg', function ()
 		templateUrl: 'partials/usrmsg.html'
 	};
 });
+
+
+pikrAppDirectives.directive('pckResultsby', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/resultsby.html'
+	};
+});
