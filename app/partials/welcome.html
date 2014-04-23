@@ -16,17 +16,24 @@
 			</div>
 	</div>
 <div pck-Msg ng-controller="detailsCtrl" id="usrmsg"></div>
-<div class="row">
-		<div class="col-md-8 col-md-offset-1">
+<div class="row" id="mypicks">
+			<div class="col-md-8 col-md-offset-1">
 				<ul class="list-group">
-					<li class="list-group-item" id="mypicks">
+					<li class="list-group-item">
+							<div pck-Usrdata></div>
+					</li>
+			</ul>
+			</div>
+			<div class="col-md-8 col-md-offset-1">
+				<ul class="list-group">
+					<li class="list-group-item">
 							<div pck-Mypcks ng-controller="detailsCtrl"></div>
 					</li>
 			</ul>
 			</div>
 			<div class="col-md-8 col-md-offset-1">
 					<ul class="list-group">
-						<li class="list-group-item" id="mypicks">
+						<li class="list-group-item">
 								<div pckr-Detail ng-controller="detailsCtrl"></div>
 						</li>
 					</ul>

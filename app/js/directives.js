@@ -205,3 +205,19 @@ pikrAppDirectives.directive('pckResultsby', function ()
 		templateUrl: 'partials/resultsby.html'
 	};
 });
+
+pikrAppDirectives.directive('pckUsrdata', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/usrdata.html'
+	};
+});
+
+pikrAppDirectives.directive('pckPics', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/pics.html'
+	};
+});

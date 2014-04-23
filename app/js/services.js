@@ -371,5 +371,42 @@ pikrAppServices.service('users', function ($q){
 							deferred.resolve(currentUser.id );
 			} 
 			return deferred.promise;
+	}   
+	
+	this.getUsrDetails =  function () {
+			
+			var deferred = $q.defer();
+			var currentUser = Parse.User.current();
+			if (currentUser) { 
+
+	
+						var usr = 
+						{
+							 usrname: currentUser.get("username"),
+								email: currentUser.get("email"),
+								fname: currentUser.get("firstname"),
+								lname: currentUser.get("lastname"),
+								gender: currentUser.get("gender"),
+								status: currentUser.get("status"),
+								profession: currentUser.get("profession"),
+							 age: getAge(currentUser.get("birthday"))
+						};
+						deferred.resolve(usr);
+			} 
+			return deferred.promise;
 	}    
+	 
 });
+
+function getAge(dateString) 
+{
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    //var m = today.getMonth() - birthDate.getMonth();
+    //if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) 
+    //{
+    //    age--;
+    //}
+    return age;
+}

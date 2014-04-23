@@ -1,21 +1,31 @@
 <div class="row"	>
-<div class="col-md-10 col-md-offset-1">
-		<h2>Detailed results for {{ params.id }} by</h2>
+	<div class="well col-md-9 col-md-offset-1">
+			<h2>Results for {{ params.id }}</h2>
+			<div class="row">
+	<div class="thumbnail col-md-9 col-md-offset-*">
+		<div pck-Pics></div>
 	</div>
 </div>
-<div class="row"	>
-		<div class="col-md-7 col-md-offset-1">
+			<form class="form-inline">
+				<label>Filter by</label>
+				<div class="form-group">
+							<select class="form-control" id="resultsBy" >
+								<option ng-repeat="filter in filters">{{ filter }}</option>
+							</select>		
+				</div>
+					<button type="submit" class="btn btn-default" ng-click="resultsBy()">Change</button>								
+			</form>
+	</div>
+
+		<div class="thumbnail col-md-9 col-md-offset-1">
 		<div pck-ResultsBy></div>
 		<div class="table-responsive" ng-controller="detailsCtrl">
-			<table class="table table-hover table-condensed">
+			<table class="table table-hover table-condensed" id="users">
 						<thead>
 								<tr>
-										<!--<th>id</th>-->
 										<th>user</th>
 										<th>results</th>
 										<th>comments</th>
-										<!--<th>created</th>
-										<th>submitted</th>-->
 								</tr>
 						</thead>
 						<tbody ng-repeat="detail in details | filter:params.id | orderBy:orderProp">
@@ -31,5 +41,4 @@
 						</tbody>
 			</table>
 		</div>
-	</div>
-
+</div>
