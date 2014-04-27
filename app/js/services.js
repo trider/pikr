@@ -270,6 +270,46 @@ this.pckStatsTotals = function (parseQuery, pcklst, fld, val){
 			return deferred.promise;	
 					
 			}	
+
+		
+		this.getChartTotals = function (parseQuery, pcklst, fld, params){
+
+				var query = parseQuery.new('picksObject').equalTo(fld, params.id);	
+				var total = new Array();
+				var deferred = $q.defer();
+				query.find(query).then(function(results) {
+												
+						angular.forEach(pcklst, function(value, key){
+								var items = value.items;
+								angular.forEach(items, function(item, k){
+											var val = 0;
+											for (var i = 0; i < results.length; i++) { 
+														var object = results[i];	
+														if(value.pckid == params.id && item == object.get('item')){
+																	val += 	object.get('val');				
+														}		
+											
+											
+											}
+											total.push( {c: [{ v: item }, {v: val }]});
+															
+							});
+
+							var totals = {"cols": [
+        {id: "Item", label: "Item", type: "string"},
+        {id: "Value", label: "Value", type: "number"}
+							], "rows": total		};
+
+							deferred.resolve(totals);
+	
+					});
+																					
+			});
+							
+			return deferred.promise;	
+					
+			}	
+
 		this.countPckrs = function(parseQuery, pcklst, fld){
 				
 				var deferred = $q.defer();

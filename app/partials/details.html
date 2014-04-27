@@ -1,44 +1,53 @@
-<div class="row"	>
-	<div class="well col-md-9 col-md-offset-1">
-			<h2>Results for {{ params.id }}</h2>
-			<div class="row">
-	<div class="thumbnail col-md-9 col-md-offset-*">
-		<div pck-Pics></div>
-	</div>
-</div>
-			<form class="form-inline">
-				<label>Filter by</label>
-				<div class="form-group">
-							<select class="form-control" id="resultsBy" >
-								<option ng-repeat="filter in filters">{{ filter }}</option>
-							</select>		
+<div class="col-md-9 col-md-offset-1">
+	<h2>Results  for {{ params.id }}</h2>
+						<div pck-Pics></div>
+		<div class="well	 col-md-9 col-md-offset-*">
+				<div class="row">
+							<div class="col-md-3 col-md-offset-*" ng-repeat="pck in pcklst | filter:pckid | filter:params.id">
+								<p><b>Description</b><br>{{ pck.description }}</p>
+								<p><b>Results</b></p>
+								<ol>
+									<li ng-repeat="total in totals | filter:pck.pckid"> {{ total.item }} ({{ total.val }}) </li>	
+								</ol>
+								<p><b>Participants</b>: <span ng-repeat="pckr in pckrs | filter:pck.pckid"> {{ pckr.count }}</span></p>
 				</div>
-					<button type="submit" class="btn btn-default" ng-click="resultsBy()">Change</button>								
-			</form>
-	</div>
-
-		<div class="thumbnail col-md-9 col-md-offset-1">
-		<div pck-ResultsBy></div>
-		<div class="table-responsive" ng-controller="detailsCtrl">
-			<table class="table table-hover table-condensed" id="users">
-						<thead>
-								<tr>
-										<th>user</th>
-										<th>results</th>
-										<th>comments</th>
-								</tr>
-						</thead>
-						<tbody ng-repeat="detail in details | filter:params.id | orderBy:orderProp">
-								<tr>
-										<td>{{ detail.user }}</td>
-										<td>
-															<p ng-repeat="result in results | filter:detail.id | orderBy:orderProp">
-																	{{ result.descrp }} ({{ result.val }})
-															</p>
-										</td>
-										<td>{{ detail.comments }}</td>
-								</tr>
-						</tbody>
-			</table>
+		<div class="col-md-6 col-md-offset-*" google-chart chart="chart" style="height:200px; width:50%;"></div>
 		</div>
+</div>
+</div>
+<div class="col-md-7 col-md-offset-1">
+	<h4>Detailed results by</h4>
+	<form class="form-inline">
+		<div class="form-group">
+				<select class="form-control" id="resultsBy" >
+					<option ng-repeat="filter in filters">{{ filter }}</option>
+				</select>		
+		</div>
+			<button type="submit" class="btn btn-default" ng-click="resultsBy()">Change</button>								
+	</form>
+	<br>
+	<div>
+		<div class="table-responsive" ng-controller="detailsCtrl">
+			<div pck-ResultsBy></div>
+			<table class="table table-hover table-condensed" id="users">
+					<thead>
+							<tr>
+									<th>user</th>
+									<th>results</th>
+									<th>comments</th>
+							</tr>
+					</thead>
+					<tbody ng-repeat="detail in details | filter:params.id | orderBy:orderProp">
+							<tr>
+									<td>{{ detail.user }}</td>
+									<td>
+														<span ng-repeat="result in results | filter:detail.id | orderBy:orderProp">
+																{{ result.item }} ({{ result.val }})
+														</span>
+									</td>
+									<td>{{ detail.comments }}</td>
+							</tr>
+					</tbody>
+		</table>
+	</div>
 </div>

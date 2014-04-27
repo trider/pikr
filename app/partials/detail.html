@@ -5,7 +5,8 @@
 							<tr>
 									<th>pckid</th>
 									<th>picks</th>
-									<th>comments</th>
+									<th>results</th>
+								 <th>comments</th>
 							</tr>
 					</thead>
 					<tbody ng-repeat="detail in details | filter:pckid | filter: params.user | orderBy:detail.created">
@@ -13,7 +14,12 @@
 									<td>{{ detail.pckid }}</td>
 								 <td>
 														<p ng-repeat="result in results | filter:detail.id">
-																{{ result.descrp }} ({{ result.val }})
+																{{ result.descrp }}
+													 </p>
+									</td>
+									<td>
+														<p ng-repeat="result in results | filter:detail.id">
+																{{ result.val }}
 													 </p>
 									</td>
 									<td>{{ detail.comments }}</td>

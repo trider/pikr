@@ -1,8 +1,8 @@
-<div ng-controller="detailsCtrl">
-			<div class="col-md-3 col-md-offset-*" ng-repeat="pick in picks">
-						<div class="thumbnail" href="#">
-							<img data-src="holder.js/100%x80" src="{{ pick.imageUrl  }}" class="thumbnail">
-							<div id="{{ pick.name }}caption" class="caption"><b>{{ pick.name }}:</b> {{ pick.description }}</div>
-					</div>
-				</div>
-		</div>
+<div class="row">
+	<div class="col-md-2 col-md-offset-*" ng-repeat="pick in picks">
+		<div class="thumbnail">
+			<img data-src="holder.js/100%x80" src="{{ pick.imageUrl  }}">
+			<div><b>{{ pick.name }}</b><br>{{ pick.description }}</div>
+	</div>
+</div>
+</div>

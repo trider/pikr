@@ -1,6 +1,6 @@
 Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61");
 
-var pikrAppControllers = angular.module('pikrAppControllers', ['angularParse', 'ad3']);
+var pikrAppControllers = angular.module('pikrAppControllers', ['angularParse', 'googlechart']);
 
 pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users',
 function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users){
@@ -67,13 +67,13 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   	$scope.pcks = pcklst.getPcklst();
   	$scope.filters = ["users", "status", "gender"];
   	$scope.picks = picks.getpicks({ id: $scope.params.id });
-			
+
   	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
   	getDetailsPromise.then(function (res)
   	{
   		$scope.details = res;
   		$scope.orderProp = 'user';
-				angular.element("#usrmsg, #status, #gender").hide();
+  		angular.element("#usrmsg, #status, #gender").hide();
   	});
 
   	var getResultsPromise = Details.getResults(parseQuery, "val");
@@ -99,6 +99,25 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   		getTotalsPromise.then(function (res)
   		{
   			$scope.totals = res;
+  		});
+
+  		var getChartTotalsPromise = Details.getChartTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
+  		getChartTotalsPromise.then(function (res)
+  		{
+  			var chart1 = {};
+  			chart1.type = "PieChart";
+  			chart1.cssStyle = "height:450px; width:400px;";
+  			chart1.data = res;
+
+  			chart1.options = {
+  				"isStacked": "false",
+  				"fill": 10,
+  				"displayExactValues": true
+  			};
+
+  			chart1.formatters = {};
+
+  			$scope.chart = chart1;
   		});
 
   		var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
@@ -168,11 +187,12 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 
   } ]);
 
-pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users',
-  function ($scope, parseQuery, $location, $routeParams, users){
+pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', 'picks',
+  function ($scope, parseQuery, $location, $routeParams, users, picks){
   	
 			angular.element("#loginbox, #join, #intro").show();
 			angular.element("#mypicks, #logoutbox, #details, #totals, #usrmsg").hide();
+			$scope.picks = picks.getpicks({ id:'pck0001' });
 			
 			var stspromise = users.getUsrStatus();
   	stspromise.then(function (res)

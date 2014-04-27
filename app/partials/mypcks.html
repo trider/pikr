@@ -3,9 +3,8 @@
 		<ol>
 			<li ng-repeat="pck in pcklst">
 				<a href="#/pikr/{{ pck.pckid }}/{{ status }}">{{ pck.pckid }}</a> 
-					<span ng-repeat="detail in details |filter:pck.pckid  | filter: status">
-						<span>: submited ({{ detail.submitted }})</span>
-					</span>
+					{{ pck.description }}
+					<span ng-repeat="detail in details |filter:pck.pckid  | filter: status">(submited: {{ detail.submitted }})</span>
 			</li>
 		</ol>
 		<!--<div pckr-Detail></div>-->

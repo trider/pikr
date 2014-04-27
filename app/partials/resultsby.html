@@ -1,5 +1,4 @@
-<div class="table-responsive" id="gender">
-	<table class="table table-hover table-condensed">
+	<table class="table table-hover table-condensed" id="gender">
 		<thead>
 				<tr>
 						<th>gender</th>
@@ -10,20 +9,17 @@
 		<tbody>
 				<tr>
 						<td>male</td>
-						<td><p ng-repeat="usrMVal in usrMVals | filter:params.id">{{ usrMVal.descrp }} ({{ usrMVal.val }})</p></td>
-						<td><p ng-repeat="usrMCnt in usrMCnts | filter:params.id">	{{ usrMCnt.count }}</p></td>
+						<td><span ng-repeat="usrMVal in usrMVals | filter:params.id">{{ usrMVal.item }} ({{ usrMVal.val }}) </span></td>
+						<td><span ng-repeat="usrMCnt in usrMCnts | filter:params.id">	{{ usrMCnt.count }}</span></td>
 				</tr>
 				<tr>
 						<td>female</td>
-						<td><p ng-repeat="usrFVal in usrFVals | filter:params.id">{{ usrFVal.descrp }} ({{ usrFVal.val }})</p></td>
-						<td><p ng-repeat="usrFCnt in usrFCnts | filter:params.id">	{{ usrFCnt.count }}</p></td>
+						<td><span ng-repeat="usrFVal in usrFVals | filter:params.id">{{ usrFVal.item }} ({{ usrFVal.val }}) </span></td>
+						<td><span ng-repeat="usrFCnt in usrFCnts | filter:params.id">	{{ usrFCnt.count }}</span></td>
 				</tr>
 		</tbody>
 	</table>
-</div>
-
-<div class="table-responsive" id="status">
-	<table class="table table-hover table-condensed" >
+	<table class="table table-hover table-condensed" id="status">
 		<thead>
 				<tr>
 						<th>status</th>
@@ -34,14 +30,13 @@
 		<tbody>
 				<tr>
 						<td>single</td>
-						<td><p ng-repeat="usrSngVal in usrSngVals | filter:params.id">{{ usrSngVal.descrp }} ({{ usrSngVal.val }})</p></td>
-						<td><p ng-repeat="usrSngCnt in usrSngCnts | filter:params.id">	{{ usrSngCnt.count }}</p></td>
+						<td><span ng-repeat="usrSngVal in usrSngVals | filter:params.id">{{ usrSngVal.item }}({{ usrSngVal.val }}) </span></td>
+						<td><span ng-repeat="usrSngCnt in usrSngCnts | filter:params.id">	{{ usrSngCnt.count }}</span></td>
 				</tr>
 				<tr>
 						<td>married</td>
-						<td><p ng-repeat="usrMrdVal in usrMrdVals | filter:params.id">{{ usrMrdVal.descrp }} ({{ usrMrdVal.val }})</p></td>
-						<td><p ng-repeat="usrMrdCnt in usrMrdCnts | filter:params.id">	{{ usrMrdCnt.count }}</p></td>
+						<td><span ng-repeat="usrMrdVal in usrMrdVals | filter:params.id">{{ usrMrdVal.item }}({{ usrMrdVal.val }}) </span></td>
+						<td><span ng-repeat="usrMrdCnt in usrMrdCnts | filter:params.id">	{{ usrMrdCnt.count }}</span></td>
 				</tr>
 		</tbody>
 	</table>
-</div>
