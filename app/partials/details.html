@@ -1,31 +1,22 @@
-<div class="col-md-9 col-md-offset-1">
+<div class="col-md-12 col-md-offset-1">
 	<h2>Results  for {{ params.id }}</h2>
-						<div pck-Pics></div>
-		<div class="well	 col-md-9 col-md-offset-*">
-				<div class="row">
-							<div class="col-md-3 col-md-offset-*" ng-repeat="pck in pcklst | filter:pckid | filter:params.id">
-								<p><b>Description</b><br>{{ pck.description }}</p>
-								<p><b>Results</b></p>
-								<ol>
-									<li ng-repeat="total in totals | filter:pck.pckid"> {{ total.item }} ({{ total.val }}) </li>	
-								</ol>
-								<p><b>Participants</b>: <span ng-repeat="pckr in pckrs | filter:pck.pckid"> {{ pckr.count }}</span></p>
-				</div>
-		<div class="col-md-6 col-md-offset-*" google-chart chart="chart" style="height:200px; width:50%;"></div>
-		</div>
-</div>
+		<h4>Results by</h4>
+			<div class="row">
+				<div class="col-md-7 col-md-offset-*">
+					<form class="form-inline">
+					<div class="form-group">
+							<select class="form-control" id="resultsBy" >
+								<option ng-repeat="filter in filters">{{ filter }}</option>
+							</select>		
+					</div>
+						<button type="submit" class="btn btn-default" ng-click="resultsBy()">Change</button>								
+				</form>
+			</div>
+	</div>
+	<br>
+	<div pck-Result></div>
 </div>
 <div class="col-md-7 col-md-offset-1">
-	<h4>Detailed results by</h4>
-	<form class="form-inline">
-		<div class="form-group">
-				<select class="form-control" id="resultsBy" >
-					<option ng-repeat="filter in filters">{{ filter }}</option>
-				</select>		
-		</div>
-			<button type="submit" class="btn btn-default" ng-click="resultsBy()">Change</button>								
-	</form>
-	<br>
 	<div>
 		<div class="table-responsive" ng-controller="detailsCtrl">
 			<div pck-ResultsBy></div>
@@ -37,7 +28,7 @@
 									<th>comments</th>
 							</tr>
 					</thead>
-					<tbody ng-repeat="detail in details | filter:params.id | orderBy:orderProp">
+					<tbody ng-repeat="detail in details | filter:type | orderBy:orderProp">
 							<tr>
 									<td>{{ detail.user }}</td>
 									<td>

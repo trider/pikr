@@ -1,0 +1,9 @@
+<div class="well	 col-md-7 col-md-offset-*" id="pick">
+		<div pck-Pics></div>
+		<div ng-repeat="pck in pcklst | filter:pckid | filter:params.id">
+				<p><b>Description: </b>{{ pck.description }}</p>
+				<p><b>Results</b>:<span ng-repeat="total in totals | filter:pck.pckid"> {{ total.item }}({{ total.val }}); </span></p>
+				<b>Participants</b>: <span ng-repeat="pckr in pckrs | filter:pck.pckid"> {{ pckr.count }}</span></p>
+				<div google-chart chart="chart1" style="height:200px; width:70%;"></div>
+	</div>
+</div>

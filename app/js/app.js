@@ -27,8 +27,7 @@ pikrApp.config(['$routeProvider',
 								.when('/details/:id', {
 										templateUrl: 'partials/details.html',
 										controller: "detailsCtrl"
-								})
-								.when('/results', {
+								}).when('/results', {
 										templateUrl: 'partials/results.html',
 										controller: "detailsCtrl"
 								})

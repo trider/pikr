@@ -9,7 +9,7 @@
 								 <th>comments</th>
 							</tr>
 					</thead>
-					<tbody ng-repeat="detail in details | filter:pckid | filter: params.user | orderBy:detail.created">
+					<tbody ng-repeat="detail in details | filter: params.user | orderBy:detail.created">
 							<tr>
 									<td>{{ detail.pckid }}</td>
 								 <td>

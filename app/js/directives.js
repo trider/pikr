@@ -121,7 +121,7 @@ pikrAppDirectives.directive('pckrFilter', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/filter.html'
+		templateUrl: 'partials/forms/filter.html'
 	};
 });
 
@@ -129,7 +129,7 @@ pikrAppDirectives.directive('pckForm', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/pckform.html'
+		templateUrl: 'partials/forms/pckform.html'
 	};
 });
 
@@ -137,7 +137,7 @@ pikrAppDirectives.directive('pckNav', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/nav.html'
+		templateUrl: 'partials/forms/nav.html'
 	};
 });
 
@@ -145,7 +145,7 @@ pikrAppDirectives.directive('pckLogin', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/login.html'
+		templateUrl: 'partials/login/login.html'
 	};
 });
 
@@ -153,7 +153,7 @@ pikrAppDirectives.directive('pckLogout', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/logout.html'
+		templateUrl: 'partials/login/logout.html'
 	};
 });
 
@@ -169,15 +169,7 @@ pikrAppDirectives.directive('pckData', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/pickdata.html'
-	};
-});
-
-pikrAppDirectives.directive('pckLogo', function ()
-{
-	return {
-		transclude: true,
-		templateUrl: 'partials/logo.html'
+		templateUrl: 'partials/directives/pickdata.html'
 	};
 });
 
@@ -193,16 +185,7 @@ pikrAppDirectives.directive('pckMsg', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/usrmsg.html'
-	};
-});
-
-
-pikrAppDirectives.directive('pckResultsby', function ()
-{
-	return {
-		transclude: true,
-		templateUrl: 'partials/resultsby.html'
+		templateUrl: 'partials/messages/usrmsg.html'
 	};
 });
 
@@ -210,7 +193,7 @@ pikrAppDirectives.directive('pckUsrdata', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/usrdata.html'
+		templateUrl: 'partials/forms/usrdata.html'
 	};
 });
 
@@ -218,6 +201,30 @@ pikrAppDirectives.directive('pckPics', function ()
 {
 	return {
 		transclude: true,
-		templateUrl: 'partials/pics.html'
+		templateUrl: 'partials/directives/pics.html'
+	};
+});
+
+pikrAppDirectives.directive('pckResultsby', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/directives/resultsby.html'
+	};
+});
+
+pikrAppDirectives.directive('pckResult', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/directives/pckresults.html'
+	};
+});
+
+pikrAppDirectives.directive('pckLogo', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/directives/logo.html'
 	};
 });

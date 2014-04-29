@@ -1,0 +1,13 @@
+	<p><b>User:</b> {{ params.user }}</p>
+	<p><b>Pckid:</b> {{ params.id }}</p>
+	<!--<div class="helptext col-md-2 col-md-offset-*"><b>ObjectID:</b> {{ params.parentID }}</div>-->
+	<div class="helptext">
+			<p><b>Pick:</b>
+					<span ng-repeat="result in results | filter:params.parentID | orderBy:result.Item">{{ result.item }} ({{ result.val }}); </span>
+			</p>
+			</div>
+			<div ng-repeat="detail in details |filter:params.parentID | orderBy:detail.created">
+				<p><b>Comments:</b> {{ detail.comments }}</p>
+				<!--<p><b>Created:</b>{{ detail.created }}</p>-->	
+		</div>
+	</div>		
