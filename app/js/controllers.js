@@ -1,6 +1,6 @@
 Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61");
 
-var pikrAppControllers = angular.module('pikrAppControllers', ['angularParse', 'googlechart']);
+var pikrAppControllers = angular.module('pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload']);
 
 pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users',
 function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users){
@@ -66,11 +66,12 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   	$scope.params = $routeParams;
   	$scope.pcks = pcklst.getPcklst();
   	$scope.filters = ["pick", "users"];
-  	$scope.dfilters = ['gender','status'];
-  	$scope.dOptions = [{ 'id': 1, 'type': 'gender', 'value': 'male' },
-																						{ 'id': 2, 'type': 'gender', 'value': 'female' },
-																						{ 'id': 3, 'type': 'status', 'value': 'single' },
-																						{ 'id': 1, 'type': 'status', 'value': 'married'}];
+  	$scope.dfilters = [{ 'type': 'gender' }, { 'type': 'status'}];
+  	$scope.dOptions = [{ 'id': 0, 'type': '-- Type --', 'value': '-- Options --' },
+																						{ 'id': 1, 'type': 'gender', 'value': 'Male' },
+																						{ 'id': 2, 'type': 'gender', 'value': 'Female' },
+																						{ 'id': 3, 'type': 'status', 'value': 'Single' },
+																						{ 'id': 1, 'type': 'status', 'value': 'Married'}];
   	$scope.picks = picks.getpicks({ id: $scope.params.id });
   	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
   	getDetailsPromise.then(function (res)
@@ -85,10 +86,16 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   	{
   		$scope.results = data;
   	});
+
   	$scope.go = function (path)
   	{
   		$location.path(path);
   	};
+
+  	$scope.activate = function (elm)
+  	{
+  		angular.element(elm).prop('disabled', false);
+  	}
 
   	$scope.showPck = function ()
   	{
@@ -105,193 +112,73 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   			$scope.totals = res;
   		});
 
-  		var getChartDetailsPromise = Details.getChartResults(parseQuery, $scope.pcklst, "pckid", $scope.params);
-  		getChartDetailsPromise.then(function (res)
-  		{
-  			//$scope.usrchart = res;
-  		});
-
-
-  		var getChartTotalsPromise = Details.getChartTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
-  		getChartTotalsPromise.then(function (res)
-  		{
-  			var chart1 = {};
-  			chart1.type = "PieChart";
-  			chart1.cssStyle = "height:450px; width:400px;";
-  			chart1.data = res;
-
-  			chart1.options = {
-  				'title': 'Total results',
-  				"isStacked": "false",
-  				"fill": 10,
-  				"displayExactValues": true
-  			};
-
-  			chart1.formatters = {};
-
-  			$scope.chart1 = chart1;
-  		});
-
-  		var MChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, "gender", 'Male', $scope.params);
-  		MChartPromise.then(function (res)
-  		{
-
-  			var chart2 = {};
-  			chart2.type = "PieChart";
-  			chart2.data = res;
-
-  			chart2.options = {
-  				'title': 'Results by Gender: Male',
-  				"isStacked": "false",
-  				"fill": 10,
-  				"displayExactValues": true
-  			};
-
-  			chart2.formatters = {};
-
-  			$scope.chart2 = chart2;
-
-  		});
-
-  		var FChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, "gender", 'Female', $scope.params);
-  		FChartPromise.then(function (res)
-  		{
-
-  			var chart3 = {};
-  			chart3.type = "PieChart";
-  			chart3.data = res;
-
-  			chart3.options = {
-  				'title': 'Results by Gender: Female',
-  				"isStacked": "false",
-  				"fill": 10,
-  				"displayExactValues": true
-  			};
-
-  			chart3.formatters = {};
-
-  			$scope.chart3 = chart3;
-
-  		});
-
-  		var SngChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, "status", 'Single', $scope.params);
-  		SngChartPromise.then(function (res)
-  		{
-
-  			var chart4 = {};
-  			chart4.type = "PieChart";
-  			chart4.data = res;
-
-  			chart4.options = {
-  				'title': 'Results by Status: Single',
-  				"isStacked": "false",
-  				"fill": 10,
-  				"displayExactValues": true
-  			};
-
-  			chart4.formatters = {};
-
-  			$scope.chart4 = chart4;
-
-  		});
-
-  		var MrdChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, "status", 'Married', $scope.params);
-  		MrdChartPromise.then(function (res)
-  		{
-
-  			var chart5 = {};
-  			chart5.type = "PieChart";
-  			chart5.data = res;
-
-  			chart5.options = {
-  				'title': 'Results by Staus: Married',
-  				"isStacked": "false",
-  				"fill": 10,
-  				"displayExactValues": true
-  			};
-
-  			chart5.formatters = {};
-
-  			$scope.chart5 = chart5;
-
-  		});
-
-
   		var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
   		countPckrsPromise.then(function (res)
   		{
   			$scope.pckrs = res;
-  		});
+					var getChartTotalsPromise = Details.getChartTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
+  			getChartTotalsPromise.then(function (res){
 
-  		var pckGChartPromise = Details.pckStats(parseQuery, $scope.pcklst);
-  		pckGChartPromise.then(function (res)
-  		{
-  			$scope.usrMVals = res;
-  		});
+  				var chart1 = {};
+  				chart1.type = "PieChart";
+  				chart1.cssStyle = "height:450px; width:400px;";
+  				chart1.data = res;
 
-  		var pckUsrMValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "gender", 'Male');
-  		pckUsrMValsPromise.then(function (res)
-  		{
-  			$scope.usrMVals = res;
-  		});
+  				chart1.options = {
+  					'title': 'Total results with ' + $scope.pckrs[0].usr_count + ' participants',
+  					"isStacked": "false",
+  					"fill": 10,
+  					"displayExactValues": true
+  				};
 
+  					chart1.formatters = {};
 
-  		var pckUsrMCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "gender", 'Male');
-  		pckUsrMCntPromise.then(function (res)
-  		{
-  			$scope.usrMCnts = res;
-  		});
-
-  		var pckUsrFValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "gender", 'Female');
-  		pckUsrFValsPromise.then(function (res)
-  		{
-  			$scope.usrFVals = res;
-  		});
-
-  		var pckUsrFCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "gender", 'Female');
-  		pckUsrFCntPromise.then(function (res)
-  		{
-  			$scope.usrFCnts = res;
-  		});
-
-  		var pckUsrSngValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "status", 'Single');
-  		pckUsrSngValsPromise.then(function (res)
-  		{
-  			$scope.usrSngVals = res;
-  		});
-
-  		var pckUsrSngCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "status", 'Single');
-  		pckUsrSngCntPromise.then(function (res)
-  		{
-  			$scope.usrSngCnts = res;
-  		});
-
-  		var pckUsrMrdValsPromise = Details.pckStats(parseQuery, $scope.pcklst, "status", 'Married');
-  		pckUsrMrdValsPromise.then(function (res)
-  		{
-  			$scope.usrMrdVals = res;
-  		});
-
-  		var pckUsrMrdCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, "status", 'Married');
-  		pckUsrMrdCntPromise.then(function (res)
-  		{
-  			$scope.usrMrdCnts = res;
+  					$scope.chart1 = chart1;
+  				});
   		});
 
   		$scope.resultsBy = function ()
   		{
 
-  			angular.element("#pick, #status").hide();
-  			var val = '#' + angular.element("#resultsBy").val();
-  			angular.element(val).show();
-  		};
+  			var flt_type = $scope.dfilters[angular.element("#flt_type").val()].type;
+  			var flt_opt = angular.element("#flt_opt").val();
+  			var chart_type = angular.element("#flt_chart").val() + 'Chart';
 
-  		$scope.dresultsBy = function ()
-  		{
+  			angular.element("#dresults").show();
 
-  			angular.element("#gender, #status").hide();
-  			var val = '#' + angular.element("#dresultsBy").val();
-  			angular.element(val).show();
+  			var pckUsrValsPromise = Details.pckStats(parseQuery, $scope.pcklst, flt_type, flt_opt);
+  			pckUsrValsPromise.then(function (res)
+  			{
+  				$scope.usrVals = res;
+  			});
+
+  			var pckUsrCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, flt_type, flt_opt);
+  			pckUsrCntPromise.then(function (res)
+  			{
+  				$scope.usrCnts = res;
+						
+  					var MChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, flt_type, flt_opt, $scope.params);
+  					MChartPromise.then(function (res)
+  					{
+
+  						var chart2 = {};
+  						chart2.type = chart_type;
+  						chart2.data = res;
+
+  						chart2.options = {
+  							'title': 'Results by ' + flt_type + ': ' + flt_opt + ' (with ' + $scope.usrCnts[0].usr_count + ' participants)',
+  							"isStacked": "false",
+  							"fill": 10,
+  							"displayExactValues": true
+  						};
+
+  						chart2.formatters = {};
+
+  						$scope.chart2 = chart2;
+
+  					});
+  			});
+
   		};
 
   	});
@@ -397,15 +284,24 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
   		$scope.usr = res;
   	});
 
-
-
-
-
-
-
   } ]);
-					
-					
-				
 
-	
+  pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'users', '$upload', 'Files', 
+  function ($scope, parseQuery, users, $upload, Files)
+  {
+
+  	$scope.onFileSelect = function ($files)
+  	{
+
+
+					var filespromise = Files.uploadFile($files[0]);
+					filespromise.then(function (res)
+  			{
+  				$scope.pckimg = res;
+  			});
+  	
+			
+			};
+
+
+  } ]);	

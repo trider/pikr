@@ -184,7 +184,7 @@ this.pckStatsTotals = function (parseQuery, pcklst, fld, val){
 					query.matchesQuery("user", innerQuery);
 					query.count(query).then(function(results) {
 														
-										total.push({ pckid: value.pckid, count: results});	
+										total.push({ pckid: value.pckid, usr_count: results});	
 	
 						}, function(error) {
 								console.log(JSON.stringify(error));
@@ -377,7 +377,7 @@ this.pckStatsTotals = function (parseQuery, pcklst, fld, val){
 					var query = parseQuery.new('pikrObject').equalTo(fld, value.pckid );	
 					query.count(query).then(function(results) {
 														
-										total.push({ pckid: value.pckid, count: results});	
+										total.push({ pckid: value.pckid, usr_count: results});	
 											
 	
 						}, function(error) {
@@ -504,6 +504,35 @@ pikrAppServices.service('users', function ($q){
 			return deferred.promise;
 	}    
 	 
+});
+
+pikrAppServices.service('Files', function ($q){		
+
+	this.uploadFile = function(file){
+
+	  var parseFile = new Parse.File(file.name, file);
+  	var deferred = $q.defer();
+			
+			var currentUser = Parse.User.current();
+			if (currentUser) { 
+			
+				parseFile.save().then(function ()
+  		{
+  			console.log(file.name + ' Uploaded');
+  			var pckimg = new Parse.Object("pckimg");
+  			pckimg.set("name", file.name);
+  			pckimg.set("file", file);
+  			pckimg.save();	
+					var img = parseFile.url();
+					deferred.resolve({ name:file.name, url:img});
+  		});	
+
+				
+			}
+			return deferred.promise;
+
+		}
+
 });
 
 function getAge(dateString) 

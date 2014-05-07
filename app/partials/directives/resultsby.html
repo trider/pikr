@@ -1,82 +1,32 @@
-<h4>Detailed results by</h4>
-			<div class="row">
-				<div class="col-md-7 col-md-offset-*">
-					<form class="form-inline">
-					<div class="form-group">
-							<select class="form-control" ng-model="type" ng-options="dfilter for dfilter in dfilters" id="dfilter">
-								<option value="">-- Choose type --</option>
-							</select> 		
-					</div>
-					<div class="form-group">
-							<select class="form-control" id="opts" >
-								<option ng-repeat="dOption in dOptions | filter:type">{{ dOption.value }}</option>
-							</select>		
-					</div>
-
-					<button type="submit" class="btn btn-default" ng-click="dresultsBy()">Change</button>								
-				</form>
+	<div class="well	 col-md-10 col-md-offset-*">
+			<form class="form-inline">
+				<label>Results by</label>
+				<div class="form-group">
+					<!--<label>Type</label>-->
+					<select class="form-control" ng-model="type" ng-options="dfilter.type for dfilter in dfilters" id="flt_type" ng-click="activate('#flt_opt')">
+						<option value="">-- Type --</option>
+					</select> 		
 			</div>
-	</div>
-	<br>
-</div>
-
-<div id="gender">
-	<div class="well	 col-md-11 col-md-offset-*">
-		<div google-chart chart="chart2" style="height:200px; width:70%;"></div>	
+			<label><!--Option--></label>	
+			<div class="form-group">
+				<select class="form-control" id="flt_opt" disabled>
+						<option ng-repeat="dOption in dOptions | filter:type">{{ dOption.value }}</option>
+					</select>		
+			</div>
+				<label>Chart type</label>
+			<div class="form-group">
+						<select class="form-control" id="flt_chart">
+						<option>Bar</option>
+						<option>Pie</option>
+					</select>		
+			</div>
+			<!--<label></label>-->
+			<button type="submit" class="btn btn-default" ng-click="resultsBy()">Change</button>	
+		</form>
 		<br>
-	 <div google-chart chart="chart3" style="height:200px; width:70%;"></div>	
+		<p><b>Participants: </b><span ng-repeat="usrCnt in usrCnts | filter:params.id">	{{ usrCnt.usr_count }}</span></p>
+		<div google-chart chart="chart2" style="height:200px; width:100%;"></div>
 	</div>
+
 		
-	<table class="table table-hover table-condensed">
-		<thead>
-				<tr>
-						<th>{{ type }} </th>
-						<th>results</th>
-						<th>participants</th>
-				</tr>
-		</thead>
-		<tbody>
-				<tr>
-						<td>male</td>
-						<td><span ng-repeat="usrMVal in usrMVals | filter:params.id">{{ usrMVal.item }} ({{ usrMVal.val }}) </span></td>
-						<td><span ng-repeat="usrMCnt in usrMCnts | filter:params.id">	{{ usrMCnt.count }}</span></td>
-				</tr>
-				<tr>
-						<td>female</td>
-						<td><span ng-repeat="usrFVal in usrFVals | filter:params.id">{{ usrFVal.item }} ({{ usrFVal.val }}) </span></td>
-						<td><span ng-repeat="usrFCnt in usrFCnts | filter:params.id">	{{ usrFCnt.count }}</span></td>
-				</tr>
-		</tbody>
-	</table>
-
-</div>
-
-<div id="status">
-	<div class="well	 col-md-11 col-md-offset-*">
-		<div google-chart chart="chart4" style="height:200px; width:70%;"></div>	
-		<br>
-	 <div google-chart chart="chart5" style="height:200px; width:70%;"></div>	
-	</div>
-
-	<table class="table table-hover table-condensed" >
-		<thead>
-				<tr>
-						<th>status</th>
-						<th>results</th>
-						<th>participants</th>
-				</tr>
-		</thead>
-		<tbody>
-				<tr>
-						<td>single</td>
-						<td><span ng-repeat="usrSngVal in usrSngVals | filter:params.id">{{ usrSngVal.item }}({{ usrSngVal.val }}) </span></td>
-						<td><span ng-repeat="usrSngCnt in usrSngCnts | filter:params.id">	{{ usrSngCnt.count }}</span></td>
-				</tr>
-				<tr>
-						<td>married</td>
-						<td><span ng-repeat="usrMrdVal in usrMrdVals | filter:params.id">{{ usrMrdVal.item }}({{ usrMrdVal.val }}) </span></td>
-						<td><span ng-repeat="usrMrdCnt in usrMrdCnts | filter:params.id">	{{ usrMrdCnt.count }}</span></td>
-				</tr>
-		</tbody>
-	</table>
-</div>
+					

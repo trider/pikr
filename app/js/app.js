@@ -58,6 +58,9 @@ pikrApp.config(['$routeProvider',
 								.when('/usrmsg', {
 										templateUrl: 'partials/usrmsg.html',
 										controller: "userCtrl"
+								}).when('/upload', {
+										templateUrl: 'partials/upload.html',
+										controller: "userCtrl"
 								})
 								.otherwise({
 										redirectTo: '/pikr'

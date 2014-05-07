@@ -1,0 +1,17 @@
+<div class="col-md-10 col-md-offset-1" ng-controller="filesCtrl">
+		<div class="pageheader">
+			<h1>Upload</h1>
+			<div class="row" >
+				<div class="col-md-10 col-md-offset-*">
+					<div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class" ng-show="dropSupported" class="well col-md-3 col-md-offset-*" style="height: 150px ">drop files here</div>		
+					<div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported" class="well" >HTML5 Drop File is not supported!</div>
+					<!--<button class="btn btn-default" ng-click="upload.abort()">Cancel Upload</button>-->
+					<div class="row">
+						<div class="col-md-3 col-md-offset-*">
+								<img data-src="holder.js/10%x80" src="{{ pckimg.url }}" class="thumbnail col-md-3" style="height: 150px; width: 100%"/>
+						</div>
+				</div>
+					<p>{{ pckimg.name }}</p>	
+			</div>
+		</div>
+</div>
