@@ -4,8 +4,7 @@
 var pikrAppDirectives = angular.module('pikrAppDirectives', []);
 
 
-pikrAppDirectives.directive('draggable', function ()
-{
+pikrAppDirectives.directive('draggable', function (){
 	return function (scope, element)
 	{
 		var el = element[0];
@@ -31,8 +30,7 @@ pikrAppDirectives.directive('draggable', function ()
 		}, false);
 	}
 });
-pikrAppDirectives.directive('droppable', function ()
-{
+pikrAppDirectives.directive('droppable', function (){
 	return {
 		scope: {
 			drop: '&',
@@ -218,6 +216,22 @@ pikrAppDirectives.directive('pckResult', function ()
 	return {
 		transclude: true,
 		templateUrl: 'partials/directives/pckresults.html'
+	};
+});
+
+pikrAppDirectives.directive('pckUpload', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/directives/file_upload.html'
+	};
+});
+
+pikrAppDirectives.directive('pckUploadlst', function ()
+{
+	return {
+		transclude: true,
+		templateUrl: 'partials/directives/uploaded_pics.html'
 	};
 });
 

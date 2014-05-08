@@ -518,13 +518,22 @@ pikrAppServices.service('Files', function ($q){
 			
 				parseFile.save().then(function ()
   		{
-  			console.log(file.name + ' Uploaded');
   			var pckimg = new Parse.Object("pckimg");
-  			pckimg.set("name", file.name);
+  			//pckimg.set("item", itm_name);
+					//pckimg.set("descrp", itm_descrp);
+					pckimg.set("name", file.name);
   			pckimg.set("file", file);
-  			pckimg.save();	
+					pckimg.set("user",		currentUser);
 					var img = parseFile.url();
-					deferred.resolve({ name:file.name, url:img});
+					pckimg.set("url",		img);
+  			pckimg.save();	
+					
+					deferred.resolve({ 
+							id: pckimg.id,
+							name:file.name, 
+							user: currentUser.get('username'),
+							url:img
+					});
   		});	
 
 				
@@ -532,6 +541,56 @@ pikrAppServices.service('Files', function ($q){
 			return deferred.promise;
 
 		}
+
+		this.setFileData = function(parseQuery, id, itm_name, itm_descrp)
+		{
+					var currentUser = Parse.User.current();
+					var query = parseQuery.new('pckimg').equalTo('id', id);	
+					var deferred = $q.defer();
+			
+					query.find(query).then(function(pckimg) {
+							pckimg[0].set("item", itm_name);
+							pckimg[0].set("descrp", itm_descrp);
+							pckimg[0].save();	
+							deferred.resolve("Object updated");	
+
+					}, function(error) {
+							deferred.rejected(JSON.stringify(error));
+					});
+
+					return deferred.promise;	
+
+		}
+
+		this.getFiles= function (parseQuery, item, descrp) {
+				
+			var currentUser = Parse.User.current();
+			var query = parseQuery.new('pckimg').equalTo('user', currentUser);	
+			var deferred = $q.defer();
+			
+			query.find(query).then(function(results) {
+				
+						var result = new Array();
+						for (var i = 0; i < results.length; i++) { 
+								var object = results[i];
+					
+								result.push({
+										id:object.id,
+										name:object.get('name'),
+										user:currentUser.get("username"),
+										item:object.get('item'),
+										descrp:object.get('descrp'),
+										url:object.get('url')
+								});
+						}
+				deferred.resolve(result);	
+
+			}, function(error) {
+					deferred.rejected(JSON.stringify(error));
+			});
+
+			return deferred.promise;
+		} 
 
 });
 

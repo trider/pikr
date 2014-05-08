@@ -286,22 +286,45 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
 
   } ]);
 
-  pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'users', '$upload', 'Files', 
-  function ($scope, parseQuery, users, $upload, Files)
+  pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'users', '$upload', 'Files', '$location',
+  function ($scope, parseQuery, users, $upload, Files, $location)
   {
 
   	$scope.onFileSelect = function ($files)
   	{
 
+  		var filespromise = Files.uploadFile($files[0]);
+  		filespromise.then(function (res)
+  		{
+  			$scope.pckimg = res;
+					angular.element("#dropPic").hide();
+					angular.element("#droppedPic, #picForm").css("visibility", "visible");
 
-					var filespromise = Files.uploadFile($files[0]);
-					filespromise.then(function (res)
-  			{
-  				$scope.pckimg = res;
-  			});
-  	
+					$scope.uploadData= function(){
+							var name = angular.element("#itm_name").val();
+							var descrp = angular.element("#itm_descrp").val();
+														
+							var setfilespromise = Files.setFileData(parseQuery, $scope.pckimg.id, name, descrp);
+  					setfilespromise.then(function (data)
+  					{
+  						$scope.txt = data;
+								angular.element("#dropPic").show();
+								angular.element("#droppedPic, picForm").hide();
+								$location.path('#/upload/');
+  					});
+							
+				};
+
+  		});
+  	};
+
 			
-			};
+
+  	var usrfilespromise = Files.getFiles(parseQuery);
+  	usrfilespromise.then(function (res)
+  	{
+  		$scope.usr_imgs = res;
+  	});
 
 
   } ]);	

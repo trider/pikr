@@ -1,0 +1,10 @@
+<div class="row">
+	<div class="col-md-10 col-md-offset-*"  ng-controller="filesCtrl">
+	<h3>Uploaded files</h3>
+	<div class="col-md-2 col-md-offset-*" ng-repeat="usr_img in usr_imgs">
+			<img class="thumbnail" src="{{ usr_img.url }}" style="height: 150px">
+			<div><b>{{ usr_img.item }}:</b>{{ usr_img.descrp }}</div>
+		</div>	
+</div>
+
+</div>	
