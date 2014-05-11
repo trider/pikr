@@ -491,12 +491,14 @@ pikrAppServices.service('users', function ($q){
 						var usr = 
 						{
 							 usrname: currentUser.get("username"),
+								password: currentUser.get("password"),
 								email: currentUser.get("email"),
 								fname: currentUser.get("firstname"),
 								lname: currentUser.get("lastname"),
 								gender: currentUser.get("gender"),
 								status: currentUser.get("status"),
 								profession: currentUser.get("profession"),
+								birthday: currentUser.get("birthday"),
 							 age: getAge(currentUser.get("birthday"))
 						};
 						deferred.resolve(usr);

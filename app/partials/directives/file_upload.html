@@ -1,5 +1,5 @@
 <div class="row">
-		<div class="thumbnail col-md-10 col-md-offset-*"  ng-controller="filesCtrl">
+		<div class="thumbnail col-md-10 col-md-offset-*" >
 			<h3>File to upload</h3>		
 			<div class="row">
 				<div class="col-md-10 col-md-offset-*" >
@@ -11,7 +11,7 @@
 						HTML5 Drop File is not supported!
 					</div>
 					<div class="well col-md-3 col-md-offset-*" style="height: 250px;width: 250px;visibility: hidden" id="droppedPic">
-						<img src="{{ pckimg.url }}" style="height: 200px;width: 75%;">
+						<img src="{{ pckimg.url }}" style="height: 200px;width:75%;">
 					</div>
 				</div>
 			</div>		
@@ -20,7 +20,7 @@
 					<div class="col-md-10 col-md-offset-*">
 							<form class="form-inline">
 										<div class="form-group">
-												<input type="text" class="form-control" id="itm_name" placeholder="Item name" tabindex="1"></input>
+												<input type="text" class="form-control" id="itm_name" placeholder="Item name" tabindex="1" value="{{ pckimg.name }}"></input>
 										</div>
 										<div class="form-group">
 												<input type="text" class="form-control" id="itm_descrp" placeholder="Item description" tabindex="2"></input>
