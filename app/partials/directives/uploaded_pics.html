@@ -1,10 +1,9 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-*"  ng-controller="filesCtrl">
-	<h3>Uploaded files</h3>
+	<h3>{{ opType }} files ({{ pckimgs }})</h3>
 	<div class="col-md-3 col-md-offset-*" ng-repeat="usr_img in usr_imgs">
 			<img class="thumbnail" src="{{ usr_img.url }}">
-			<div><b>{{ usr_img.item }}:</b>{{ usr_img.descrp }}</div>
-		</div>	
-</div>
-
+			<input type="checkbox" ng-model="val" ng-true-value=true ng-change="countSelectedPic(val, usr_img)"> 
+			<b>{{ usr_img.name }}:</b><br>{{ usr_img.descrp }}</div>
+	</div>	
 </div>	

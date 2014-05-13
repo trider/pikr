@@ -564,7 +564,7 @@ pikrAppServices.service('Files', function ($q){
 
 		}
 
-		this.getFiles= function (parseQuery, item, descrp) {
+		this.getFiles= function (parseQuery, descrp) {
 				
 			var currentUser = Parse.User.current();
 			var query = parseQuery.new('pckimg').equalTo('user', currentUser);	
@@ -580,9 +580,9 @@ pikrAppServices.service('Files', function ($q){
 										id:object.id,
 										name:object.get('name'),
 										user:currentUser.get("username"),
-										item:object.get('item'),
 										descrp:object.get('descrp'),
-										url:object.get('url')
+										url:object.get('url'),
+										selected: false
 								});
 						}
 				deferred.resolve(result);	
@@ -593,6 +593,38 @@ pikrAppServices.service('Files', function ($q){
 
 			return deferred.promise;
 		} 
+
+		this.createPck = function(parsePersistence, pck){
+
+  	//console.log(pck.imgs);
+			
+			var currentUser = Parse.User.current();
+			var deferred = $q.defer();
+			var pckObject = parsePersistence.new('pckObject');
+			if (currentUser) {
+			
+			
+				
+				pckObject.set("user",		currentUser);
+				parsePersistence.save(pckObject, 
+				{		
+						pckid:pck.id, 
+  				descrp: pck.descrp,
+						start: pck.start,
+						end: pck.end,
+						imgs: pck.imgs
+				}); 
+
+				deferred.resolve("#/pikr/" + pck.id + "/" + currentUser.get("username"));
+				
+			
+			
+			}
+			
+			return deferred.promise;	
+		}
+
+
 
 });
 

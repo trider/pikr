@@ -8,60 +8,41 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 	angular.element("#logout, #usrmsg").hide();
 	$scope.params = $routeParams;
 	$scope.picks = picks.getpicks({ id: $scope.params.id });
-
 	var getUsrStatusPromise = users.getUsrStatus();
-	getUsrStatusPromise.then(function (res)
-	{
+	getUsrStatusPromise.then(function (res){
 		$scope.status = res;
 	});
-
 	var getUsrIDPromise = users.getUsrID();
-	getUsrIDPromise.then(function (res)
-	{
+	getUsrIDPromise.then(function (res){
 		$scope.status = res;
-
 	});
-
-
 	var submittedPromise = Details.pckSubmittedStatus(parseQuery, $scope.params);
-	submittedPromise.then(function (res)
-	{
+	submittedPromise.then(function (res){
 		$location.path(res);
 	});
-
-
-	$scope.handleDrop = function (item, bin)
-	{
+	$scope.handleDrop = function (item, bin){
 		$scope.message = item + ' has been dropped into ' + bin;
 	}
-
-	$scope.go = function (path)
-	{
+	$scope.go = function (path){
 		$location.path(path);
 	};
-
-	$scope.submitPick = function ()
-	{
+	$scope.submitPick = function (){
 
 		$scope.message = Name.getName($scope.picks);
 		angular.element("#droptxt").html($scope.name);
 
 		var promise = Submit.upload(parsePersistence, $scope.params, $scope.picks, angular.element("#cmnt_txt").val());
-		promise.then(function (res)
-		{
+		promise.then(function (res){
 			$scope.msg = res;
 			$location.path('/totals/' + $scope.params.id + '/' + $scope.params.user + '/' + res);
 			//$location.path('/pikr/' + $scope.params.user);
 		});
 
 	}
-
-
 } ]);
 
 pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', '$routeParams',
-  function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams)
-  {
+ function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams){
 
   	$scope.params = $routeParams;
   	$scope.pcks = pcklst.getPcklst();
@@ -72,49 +53,39 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 																						{ 'id': 2, 'type': 'gender', 'value': 'Female' },
 																						{ 'id': 3, 'type': 'status', 'value': 'Single' },
 																						{ 'id': 1, 'type': 'status', 'value': 'Married'}];
-  	$scope.picks = picks.getpicks({ id: $scope.params.id });
+  	
+			$scope.picks = picks.getpicks({ id: $scope.params.id });
   	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
-  	getDetailsPromise.then(function (res)
-  	{
+  	getDetailsPromise.then(function (res){
   		$scope.details = res;
   		$scope.orderProp = 'user';
   		angular.element("#usrmsg, #status, #users").hide();
   	});
 
   	var getResultsPromise = Details.getResults(parseQuery, "val");
-  	getResultsPromise.then(function (data)
-  	{
+  	getResultsPromise.then(function (data){
   		$scope.results = data;
   	});
-
-  	$scope.go = function (path)
-  	{
+  	$scope.go = function (path){
   		$location.path(path);
   	};
-
-  	$scope.activate = function (elm)
-  	{
+  	$scope.activate = function (elm){
   		angular.element(elm).prop('disabled', false);
   	}
-
-  	$scope.showPck = function ()
-  	{
+  	$scope.showPck = function (){
   		var id = angular.element("#pckid_txt").val();
   		var user = angular.element("#usr_txt").val();
   		$location.path('/pikr/' + id + '/' + user);
   	};
-  	$scope.pcklst = pcklst.getPcklst({}, function ()
-  	{
+  	$scope.pcklst = pcklst.getPcklst({}, function (){
 
-  		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
-  		getTotalsPromise.then(function (res)
-  		{
+  	var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
+  	getTotalsPromise.then(function (res){
   			$scope.totals = res;
   		});
 
-  		var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
-  		countPckrsPromise.then(function (res)
-  		{
+  	var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
+  	countPckrsPromise.then(function (res){
   			$scope.pckrs = res;
 					var getChartTotalsPromise = Details.getChartTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
   			getChartTotalsPromise.then(function (res){
@@ -137,8 +108,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
   				});
   		});
 
-  		$scope.resultsBy = function ()
-  		{
+  	$scope.resultsBy = function (){
 
   			var flt_type = $scope.dfilters[angular.element("#flt_type").val()].type;
   			var flt_opt = angular.element("#flt_opt").val();
@@ -181,34 +151,30 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 
   		};
 
-  	});
+  });
 
 
   } ]);
 
 pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', 'picks',
-  function ($scope, parseQuery, $location, $routeParams, users, picks){
+ function ($scope, parseQuery, $location, $routeParams, users, picks){
   	
 			angular.element("#loginbox, #join, #intro").show();
 			angular.element("#mypicks, #logoutbox, #details, #totals, #usrmsg").hide();
 			$scope.picks = picks.getpicks({ id:'pck0001' });
 			
 			var stspromise = users.getUsrStatus();
-  	stspromise.then(function (res)
-  	{
+  	stspromise.then(function (res){
   		$scope.status = res;
 
-				if(res != "nobody")
-				{
+				if(res != "nobody"){
 					angular.element("#usrstatus").html(res);
 					angular.element("#loginbox, #join, #intro").hide();
 					angular.element("#mypicks, #logoutbox, #details, #totals").show();
 				}
 
   	});
-
-  	$scope.userSignup = function ()
-  	{
+  	$scope.userSignup = function (){
   		var fname = angular.element("#fnametxt").val();
   		var lname = angular.element("#lnametxt").val();
   		var gndr = angular.element("#gndrtxt").val();
@@ -222,21 +188,18 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
   		var bday = new Date(angular.element("#bdaytxt").val())
 
   		var usrpromise = users.userSignUp(usr, email, pw, pw2, fname, lname, gndr, status, prof, bday);
-				usrpromise.then(function (res)
-  		{
+				usrpromise.then(function (res){
   			$scope.status = res;
   			$location.path('/pikr/' + res);
   		});
   	};
-
-  	$scope.login = function ()
-  	{
+  	$scope.login = function (){
 
   		var pw = angular.element("#pwtxt").val();
   		var usr = angular.element("#usrtxt").val();
-  		var loginpromise = users.userLogin(usr, pw);
-  		loginpromise.then(function (res)
-  		{
+  		
+				var loginpromise = users.userLogin(usr, pw);
+  		loginpromise.then(function (res){
   			$location.path('/pikr/' + usr);
 					$scope.status = res;
   			angular.element("#usrstatus").html(res);
@@ -245,28 +208,19 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
   		});
 
   	};
-
-  	$scope.logout = function ()
-  	{
+  	$scope.logout = function (){
   		var logoutpromise = users.userLogout();
-  		logoutpromise.then(function (res)
-  		{
-  			
+  		logoutpromise.then(function (res){
 					$location.path('/pikr');
   			$scope.status = res;
 					angular.element("#usrstatus").html(res);
   			angular.element("#loginbox, #join").show();
 					angular.element("#mypicks").hide();
 					angular.element("#usrtxt, #pwtxt").val('');
-					
   		});
 
-  		
-
   	};
-
-  	$scope.clear = function ()
-  	{
+  	$scope.clear = function (){
   		angular.element("#fnametxt").val("");
   		angular.element("#lnametxt").val("");
   		angular.element("#usrtxt").val("");
@@ -277,54 +231,120 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
   		angular.element("#pwtxt").val("");
   		angular.element("#emailtxt").val("");
   	};
-
 			var usrdetailspromise = users.getUsrDetails();
-			usrdetailspromise.then(function (res)
-  	{
+			usrdetailspromise.then(function (res){
   		$scope.usr = res;
   	});
 
   } ]);
 
-  pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'users', '$upload', 'Files', '$location',
-  function ($scope, parseQuery, users, $upload, Files, $location)
-  {
+  pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'parsePersistence', 'users', '$upload', 'Files', '$location', '$rootScope',
+ function ($scope, parseQuery, parsePersistence, users, $upload, Files, $location, $rootScope)
+ {
 
-  	$scope.onFileSelect = function ($files)
-  	{
+		$scope.onFileSelect = function ($files)
+ 	{
 
-  		var filespromise = Files.uploadFile($files[0]);
-  		filespromise.then(function (res)
-  		{
-  			$scope.pckimg = res;
-					angular.element("#dropPic").hide();
-					angular.element("#droppedPic, #picForm").css("visibility", "visible");
+ 		var filespromise = Files.uploadFile($files[0]);
+ 		filespromise.then(function (res)
+ 		{
+ 			$scope.pckimg = res;
+ 			angular.element("#dropPic").hide();
+ 			angular.element("#droppedPic, #picForm").css("visibility", "visible");
+ 			$scope.uploadData = function ()
+ 			{
+ 				var name = angular.element("#itm_name").val();
+ 				var descrp = angular.element("#itm_descrp").val();
 
-					$scope.uploadData= function(){
-							var name = angular.element("#itm_name").val();
-							var descrp = angular.element("#itm_descrp").val();
-														
-							var setfilespromise = Files.setFileData(parseQuery, $scope.pckimg.id, name, descrp);
-  					setfilespromise.then(function (data)
-  					{
-  						$scope.txt = data;
-								angular.element("#dropPic").show();
-								angular.element("#droppedPic, picForm").hide();
-								$location.path('#/upload/');
-  					});
-							
-				};
+ 				var setfilespromise = Files.setFileData(parseQuery, $scope.pckimg.id, name, descrp);
+ 				setfilespromise.then(function (data)
+ 				{
+ 					$scope.txt = data;
+ 					angular.element("#dropPic").show();
+ 					angular.element("#droppedPic, picForm").hide();
+ 					//$location.path('/upload');
+ 				});
 
-  		});
-  	};
+ 			};
 
-			
+ 		});
+ 	};
 
-  	var usrfilespromise = Files.getFiles(parseQuery);
-  	usrfilespromise.then(function (res)
-  	{
-  		$scope.usr_imgs = res;
-  	});
+ 	var usrfilespromise = Files.getFiles(parseQuery);
+ 	usrfilespromise.then(function (res)
+ 	{
+ 		$scope.usr_imgs = res;
+ 		$scope.pckimgs = 0;
+ 		$rootScope.imgs = res;
+			$scope.opType = "Uploaded";
+ 	});
+
+ 	$scope.countSelectedPic = function (val, usrImg)
+ 	{
+ 		angular.forEach($scope.usr_imgs, function (img, index)
+ 		{
+ 			if (img.id == usrImg.id)
+ 			{
+ 				$scope.usr_imgs[index].selected = val;
+
+ 			}
+ 		});
+
+ 		if (val)
+ 		{
+ 			$scope.pckimgs++;
+ 		}
+ 		else
+ 		{
+ 			$scope.pckimgs--;
+
+ 		}
+ 		$rootScope.pckimgs = $scope.pckimgs;
+ 		$rootScope.imgs = $scope.usr_imgs;
+			$scope.opType = "Selected";
+ 	};
+
+ 	$scope.CreatePck = function ()
+ 	{
+
+ 		if ($rootScope.pckimgs == 3)
+ 		{
+ 			var start = new Date(angular.element("#startdate").val() + ' ' + angular.element("#starttime").val());
+ 			var end = new Date(angular.element("#enddate").val() + ' ' + angular.element("#endtime").val());
+ 			var imgs = new Array();
+
+ 			angular.forEach($rootScope.imgs, function (img, index)
+ 			{
+ 				if (img.selected)
+ 				{
+ 					imgs.push(img.id);
+ 				}
+ 			});
 
 
-  } ]);	
+ 			var pck = {
+ 				id: angular.element("#usrpckid").val(),
+ 				descrp: angular.element("#usrpckdescrp").val(),
+ 				start: start,
+ 				end: end,
+ 				imgs: imgs
+ 			};
+
+ 			var createpckpromise = Files.createPck(parsePersistence, pck);
+ 			createpckpromise.then(function (res)
+ 			{
+ 				$scope.newpck = res;
+ 			});
+ 		}
+ 		else
+ 		{
+ 			alert('You pck must include 3 pictures');
+ 		}
+
+
+
+
+
+ 	};
+
+ } ]);	

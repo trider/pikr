@@ -3,13 +3,10 @@
 			<h3>File to upload</h3>		
 			<div class="row">
 				<div class="col-md-10 col-md-offset-*" >
-					<div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class" ng-show="dropSupported" 
+					<div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class" 
 						class="well col-md-3 col-md-offset-*" style="height: 250px;" id="dropPic">
 						Drop files here
 					</div>		
-					<div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported" class="col-md-1 col-md-offset-*" >
-						HTML5 Drop File is not supported!
-					</div>
 					<div class="well col-md-3 col-md-offset-*" style="height: 250px;width: 250px;visibility: hidden" id="droppedPic">
 						<img src="{{ pckimg.url }}" style="height: 200px;width:75%;">
 					</div>
