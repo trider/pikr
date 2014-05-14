@@ -72,7 +72,36 @@ pikrAppServices.service('Submit', function ($q){
 				return deferred.promise;	
 		}
 });
-pikrAppServices.service('Details', function ($q){
+pikrAppServices.service( 'Details', function ( $q ) {
+
+	this.getPcks = function ( parseQuery, params ) {
+
+		var deferred = $q.defer();
+		var query = parseQuery.new( 'pckObject' );
+		query.find( query ).then( function ( results ) {
+
+			var result = new Array();
+			for ( var i = 0; i < results.length; i++ ) {
+				var object = results[i];
+				result.push( {
+					id: object.id,
+					pckid: object.get( 'pckid' ),
+					descrp: object.get( "descrp" ),
+					start: object.get( "start" ),
+					end: object.get( "end" ),
+					imgs: object.get( "imgs" )
+				} );
+			}
+
+			deferred.resolve(result);
+
+
+		}, function ( error ) {
+			deferred.rejected( JSON.stringify( error ) );
+		} );
+
+		return deferred.promise;
+	}
 
 		this.getResults= function (parseQuery, fld) {
 				
@@ -172,7 +201,7 @@ pikrAppServices.service('Details', function ($q){
 
 		return deferred.promise;
 }
-this.pckStatsTotals = function (parseQuery, pcklst, fld, val){
+		this.pckStatsTotals = function (parseQuery, pcklst, fld, val){
 	
 				var total = new Array();
 				var deferred = $q.defer();
@@ -194,11 +223,8 @@ this.pckStatsTotals = function (parseQuery, pcklst, fld, val){
 				
 				});			
 					
-			
-																					
-
 				return deferred.promise;
-}
+		}
 
 
 		this.pckSubmittedStatus = function (parseQuery, params){
@@ -209,7 +235,7 @@ this.pckStatsTotals = function (parseQuery, pcklst, fld, val){
 					query.containedIn("username", [params.user]);	
 
 						query.count(query).then(function(results) {
-								console.log(params.user + ", " + params.id + ", " + currentUser.id + ", "+ results);
+								//console.log(params.user + ", " + params.id + ", " + currentUser.id + ", "+ results);
 								
 								if (results == 0){	
 											deferred.resolve('/pikr/' + params.id + '/' + params.user);
@@ -589,6 +615,9 @@ pikrAppServices.service('Files', function ($q){
 
 			return deferred.promise;
 	}
+
+
+
 	this.countSelectedImgs = function ( val, pckimgs ) {
 			
 		if (val){
@@ -605,7 +634,15 @@ pikrAppServices.service('Files', function ($q){
 		var imgs = new Array();
 		angular.forEach( pckImgs, function ( img, index ) {
 			if ( img.selected ) {
-				imgs.push( img.id );
+				var num = index + 1
+				imgs.push( {
+								id: img.id,
+								item: 'Item' + num,
+								bin: 'Bin' + num,
+								name: img.name,
+								descrp: img.descrp,
+								url: img.url
+				} );
 			}
 		} );
 		
@@ -634,7 +671,37 @@ pikrAppServices.service('Files', function ($q){
 			}
 			
 			return deferred.promise;	
-		}
+	}
+
+	this.getPck = function ( parseQuery, params ) {
+		
+		var deferred = $q.defer();
+		var query = parseQuery.new( 'pckObject' ).equalTo( 'pckid', params.id );
+		query.find( query).then( function ( results ) {
+
+
+			for ( var i = 0; i < results.length; i++ ) {
+				var object = results[i];
+				deferred.resolve( {
+					id: object.id,
+					pckid: object.get( 'pickid' ),
+					descrp: object.get( "descrp" ),
+					start: object.get( "start" ),
+					end: object.get( "end" ),
+					imgs: object.get( "imgs" )
+				});
+			}
+			
+
+		}, function ( error ) {
+			deferred.rejected( JSON.stringify( error ) );
+		} );
+
+		return deferred.promise;
+	}
+
+	
+
 
 });
 function getAge(dateString) 

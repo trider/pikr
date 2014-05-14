@@ -1,18 +1,22 @@
 Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61");
 var pikrAppControllers = angular.module( 'pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload'] );
 
-pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users',
-function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users){
+pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users', 'Files',
+function ($scope, $window,	$location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users, Files){
 
 	angular.element("#logout, #usrmsg").hide();
 	$scope.params = $routeParams;
-	$scope.picks = picks.getpicks({ id: $scope.params.id });
 
 	var getUsrStatusPromise = users.getUsrStatus();
-
 	getUsrStatusPromise.then( function ( res ) {
 		$scope.status = res;
 	});
+
+	var PckDetailsPromise = Files.getPck( parseQuery, $scope.params );
+	PckDetailsPromise.then( function ( res ) {
+		$scope.pckdetails = res;
+		$scope.picks = res.imgs;
+	} );
 
 	var getUsrIDPromise = users.getUsrID();
 	getUsrIDPromise.then(function (res){
@@ -47,11 +51,19 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 	}
 } ]);
 
-pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', '$routeParams',
-	function ( $scope, $location, parseQuery, Details, pcklst, picks, $routeParams ) {
+pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', '$routeParams', 
+	function ( $scope, $location, parseQuery, Details, pcklst, $routeParams ) {
 
   	$scope.params = $routeParams;
-  	$scope.pcks = pcklst.getPcklst();
+  	//$scope.pcks = pcklst.getPcklst();
+
+  	var PcksPromise = Details.getPcks( parseQuery, $scope.params );
+  	PcksPromise.then( function ( res ) {
+  		$scope.picks = res;
+  		console.log( res );
+  	});
+
+
   	$scope.filters = ["pick", "users"];
   	$scope.dfilters = [{ 'type': 'gender' }, { 'type': 'status'}];
   	$scope.dOptions = [{ 'id': 0, 'type': '-- Type --', 'value': '-- Options --' },
@@ -60,7 +72,6 @@ pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuer
 																						{ 'id': 3, 'type': 'status', 'value': 'Single' },
 																						{ 'id': 1, 'type': 'status', 'value': 'Married'}];
   	
-			$scope.picks = picks.getpicks({ id: $scope.params.id });
   	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
   	getDetailsPromise.then(function (res){
   		$scope.details = res;
