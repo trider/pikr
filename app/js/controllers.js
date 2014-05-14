@@ -1,6 +1,5 @@
 Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61");
-
-var pikrAppControllers = angular.module('pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload']);
+var pikrAppControllers = angular.module( 'pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload'] );
 
 pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users',
 function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users){
@@ -8,25 +7,32 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 	angular.element("#logout, #usrmsg").hide();
 	$scope.params = $routeParams;
 	$scope.picks = picks.getpicks({ id: $scope.params.id });
+
 	var getUsrStatusPromise = users.getUsrStatus();
-	getUsrStatusPromise.then(function (res){
+
+	getUsrStatusPromise.then( function ( res ) {
 		$scope.status = res;
 	});
+
 	var getUsrIDPromise = users.getUsrID();
 	getUsrIDPromise.then(function (res){
-		$scope.status = res;
+	    $scope.status = res;
 	});
-	var submittedPromise = Details.pckSubmittedStatus(parseQuery, $scope.params);
+
+	var submittedPromise = Details.pckSubmittedStatus( parseQuery, $scope.params );
 	submittedPromise.then(function (res){
 		$location.path(res);
-	});
+	} );
+
 	$scope.handleDrop = function (item, bin){
 		$scope.message = item + ' has been dropped into ' + bin;
 	}
+
 	$scope.go = function (path){
 		$location.path(path);
 	};
-	$scope.submitPick = function (){
+
+	$scope.submitPick = function () {
 
 		$scope.message = Name.getName($scope.picks);
 		angular.element("#droptxt").html($scope.name);
@@ -41,8 +47,8 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 	}
 } ]);
 
-pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', '$routeParams',
- function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams){
+pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', '$routeParams',
+	function ( $scope, $location, parseQuery, Details, pcklst, picks, $routeParams ) {
 
   	$scope.params = $routeParams;
   	$scope.pcks = pcklst.getPcklst();
@@ -238,27 +244,21 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
 
   } ]);
 
-  pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'parsePersistence', 'users', '$upload', 'Files', '$location', '$rootScope',
- function ($scope, parseQuery, parsePersistence, users, $upload, Files, $location, $rootScope)
- {
+pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'parsePersistence', 'users', '$upload', 'Files', '$location', '$rootScope',
+ function ($scope, parseQuery, parsePersistence, users, $upload, Files, $location, $rootScope){
 
-		$scope.onFileSelect = function ($files)
- 	{
-
+	$scope.onFileSelect = function ($files){
  		var filespromise = Files.uploadFile($files[0]);
- 		filespromise.then(function (res)
- 		{
+ 		filespromise.then(function (res){
  			$scope.pckimg = res;
  			angular.element("#dropPic").hide();
  			angular.element("#droppedPic, #picForm").css("visibility", "visible");
- 			$scope.uploadData = function ()
- 			{
+ 			$scope.uploadData = function (){
  				var name = angular.element("#itm_name").val();
  				var descrp = angular.element("#itm_descrp").val();
 
  				var setfilespromise = Files.setFileData(parseQuery, $scope.pckimg.id, name, descrp);
- 				setfilespromise.then(function (data)
- 				{
+ 				setfilespromise.then(function (data){
  					$scope.txt = data;
  					angular.element("#dropPic").show();
  					angular.element("#droppedPic, picForm").hide();
@@ -271,63 +271,36 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
  	};
 
  	var usrfilespromise = Files.getFiles(parseQuery);
- 	usrfilespromise.then(function (res)
- 	{
+ 	usrfilespromise.then(function (res){
  		$scope.usr_imgs = res;
  		$scope.pckimgs = 0;
  		$rootScope.imgs = res;
 			$scope.opType = "Uploaded";
  	});
 
- 	$scope.countSelectedPic = function (val, usrImg)
- 	{
- 		angular.forEach($scope.usr_imgs, function (img, index)
- 		{
- 			if (img.id == usrImg.id)
- 			{
- 				$scope.usr_imgs[index].selected = val;
-
+ 	$scope.countSelectedPic = function (val, usrImg){
+ 		angular.forEach($scope.usr_imgs, function (img, index) {
+ 			if ( img.id == usrImg.id ) {
+ 				$scope.usr_imgs[index].selected = val
  			}
  		});
 
- 		if (val)
- 		{
- 			$scope.pckimgs++;
- 		}
- 		else
- 		{
- 			$scope.pckimgs--;
-
- 		}
+ 		$scope.pckimgs = Files.countSelectedImgs( val, $scope.pckimgs );
  		$rootScope.pckimgs = $scope.pckimgs;
  		$rootScope.imgs = $scope.usr_imgs;
 			$scope.opType = "Selected";
  	};
 
- 	$scope.CreatePck = function ()
- 	{
+ 	$scope.CreatePck = function (){
 
- 		if ($rootScope.pckimgs == 3)
- 		{
- 			var start = new Date(angular.element("#startdate").val() + ' ' + angular.element("#starttime").val());
- 			var end = new Date(angular.element("#enddate").val() + ' ' + angular.element("#endtime").val());
- 			var imgs = new Array();
-
- 			angular.forEach($rootScope.imgs, function (img, index)
- 			{
- 				if (img.selected)
- 				{
- 					imgs.push(img.id);
- 				}
- 			});
-
-
+ 		if ($rootScope.pckimgs == 3){
+ 			
  			var pck = {
  				id: angular.element("#usrpckid").val(),
  				descrp: angular.element("#usrpckdescrp").val(),
- 				start: start,
- 				end: end,
- 				imgs: imgs
+ 				start: new Date( angular.element( "#startdate" ).val() + ' ' + angular.element( "#starttime" ).val()),
+ 				end: new Date( angular.element( "#enddate" ).val() + ' ' + angular.element( "#endtime" ).val()),
+ 				imgs: Files.createImgLst( $rootScope.imgs )
  			};
 
  			var createpckpromise = Files.createPck(parsePersistence, pck);
@@ -336,15 +309,9 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
  				$scope.newpck = res;
  			});
  		}
- 		else
- 		{
+ 		else{
  			alert('You pck must include 3 pictures');
  		}
+ };
 
-
-
-
-
- 	};
-
- } ]);	
+} ]);	

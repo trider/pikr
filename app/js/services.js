@@ -507,9 +507,7 @@ pikrAppServices.service('users', function ($q){
 	}    
 	 
 });
-
 pikrAppServices.service('Files', function ($q){		
-
 	this.uploadFile = function(file){
 
 	  var parseFile = new Parse.File(file.name, file);
@@ -543,8 +541,7 @@ pikrAppServices.service('Files', function ($q){
 			return deferred.promise;
 
 		}
-
-		this.setFileData = function(parseQuery, id, itm_name, itm_descrp)
+	this.setFileData = function(parseQuery, id, itm_name, itm_descrp)
 		{
 					var currentUser = Parse.User.current();
 					var query = parseQuery.new('pckimg').equalTo('id', id);	
@@ -563,8 +560,7 @@ pikrAppServices.service('Files', function ($q){
 					return deferred.promise;	
 
 		}
-
-		this.getFiles= function (parseQuery, descrp) {
+	this.getFiles = function (parseQuery, descrp) {
 				
 			var currentUser = Parse.User.current();
 			var query = parseQuery.new('pckimg').equalTo('user', currentUser);	
@@ -592,42 +588,55 @@ pikrAppServices.service('Files', function ($q){
 			});
 
 			return deferred.promise;
-		} 
-
-		this.createPck = function(parsePersistence, pck){
-
-  	//console.log(pck.imgs);
+	}
+	this.countSelectedImgs = function ( val, pckimgs ) {
 			
+		if (val){
+			pckimgs++;
+		}
+		else{
+			pckimgs--;
+		}
+		return pckimgs;
+
+	}
+	this.createImgLst = function ( pckImgs ) {
+
+		var imgs = new Array();
+		angular.forEach( pckImgs, function ( img, index ) {
+			if ( img.selected ) {
+				imgs.push( img.id );
+			}
+		} );
+		
+		return imgs;
+
+	}
+
+
+	this.createPck = function ( parsePersistence, pck ) {
+  	//console.log(pck.imgs);
 			var currentUser = Parse.User.current();
 			var deferred = $q.defer();
 			var pckObject = parsePersistence.new('pckObject');
 			if (currentUser) {
-			
-			
-				
+
 				pckObject.set("user",		currentUser);
-				parsePersistence.save(pckObject, 
-				{		
+				parsePersistence.save(pckObject, {		
 						pckid:pck.id, 
   				descrp: pck.descrp,
 						start: pck.start,
 						end: pck.end,
-						imgs: pck.imgs
-				}); 
+						imgs: pck.imgs}); 
 
 				deferred.resolve("#/pikr/" + pck.id + "/" + currentUser.get("username"));
-				
-			
-			
+
 			}
 			
 			return deferred.promise;	
 		}
 
-
-
 });
-
 function getAge(dateString) 
 {
     var today = new Date();
