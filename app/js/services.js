@@ -242,7 +242,7 @@ pikrAppServices.service( 'Details', function ( $q ) {
 								}
 								else
 								{
-											deferred.resolve('/usrmsg');
+											deferred.resolve('/usrmsg/');
 								}
 								
 						}, function(error) {

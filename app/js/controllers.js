@@ -1,42 +1,36 @@
 Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61");
 var pikrAppControllers = angular.module( 'pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload'] );
 
-pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users', 'Files',
-function ($scope, $window,	$location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users, Files){
+pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users',
+function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users){
 
 	angular.element("#logout, #usrmsg").hide();
 	$scope.params = $routeParams;
-
+	
+	$scope.picks = picks.getpicks({ id: $scope.params.id });
+	
 	var getUsrStatusPromise = users.getUsrStatus();
-	getUsrStatusPromise.then( function ( res ) {
+	getUsrStatusPromise.then(function (res){
 		$scope.status = res;
 	});
-
-	var PckDetailsPromise = Files.getPck( parseQuery, $scope.params );
-	PckDetailsPromise.then( function ( res ) {
-		$scope.pckdetails = res;
-		$scope.picks = res.imgs;
-	} );
-
+	
 	var getUsrIDPromise = users.getUsrID();
 	getUsrIDPromise.then(function (res){
-	    $scope.status = res;
+		$scope.status = res;
 	});
-
-	var submittedPromise = Details.pckSubmittedStatus( parseQuery, $scope.params );
+	
+	var submittedPromise = Details.pckSubmittedStatus(parseQuery, $scope.params);
 	submittedPromise.then(function (res){
 		$location.path(res);
-	} );
-
+	});
+	
 	$scope.handleDrop = function (item, bin){
 		$scope.message = item + ' has been dropped into ' + bin;
 	}
-
 	$scope.go = function (path){
 		$location.path(path);
 	};
-
-	$scope.submitPick = function () {
+	$scope.submitPick = function (){
 
 		$scope.message = Name.getName($scope.picks);
 		angular.element("#droptxt").html($scope.name);
@@ -51,19 +45,11 @@ function ($scope, $window,	$location, parsePersistence, parseQuery, $routeParams
 	}
 } ]);
 
-pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', '$routeParams', 
-	function ( $scope, $location, parseQuery, Details, pcklst, $routeParams ) {
+pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', '$routeParams',
+ function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams){
 
   	$scope.params = $routeParams;
-  	//$scope.pcks = pcklst.getPcklst();
-
-  	var PcksPromise = Details.getPcks( parseQuery, $scope.params );
-  	PcksPromise.then( function ( res ) {
-  		$scope.picks = res;
-  		console.log( res );
-  	});
-
-
+  	$scope.pcks = pcklst.getPcklst();
   	$scope.filters = ["pick", "users"];
   	$scope.dfilters = [{ 'type': 'gender' }, { 'type': 'status'}];
   	$scope.dOptions = [{ 'id': 0, 'type': '-- Type --', 'value': '-- Options --' },
@@ -72,6 +58,7 @@ pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuer
 																						{ 'id': 3, 'type': 'status', 'value': 'Single' },
 																						{ 'id': 1, 'type': 'status', 'value': 'Married'}];
   	
+			$scope.picks = picks.getpicks({ id: $scope.params.id });
   	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
   	getDetailsPromise.then(function (res){
   		$scope.details = res;
@@ -143,7 +130,7 @@ pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuer
   			pckUsrCntPromise.then(function (res)
   			{
   				$scope.usrCnts = res;
-						
+
   					var MChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, flt_type, flt_opt, $scope.params);
   					MChartPromise.then(function (res)
   					{
@@ -153,7 +140,7 @@ pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuer
   						chart2.data = res;
 
   						chart2.options = {
-  							'title': 'Results by ' + flt_type + ': ' + flt_opt + ' (with ' + $scope.usrCnts[0].usr_count + ' participants)',
+  							'title': 'Results by ' + flt_type + ': ' + flt_opt,
   							"isStacked": "false",
   							"fill": 10,
   							"displayExactValues": true
@@ -172,6 +159,7 @@ pikrAppControllers.controller( 'detailsCtrl', ['$scope', '$location', 'parseQuer
 
 
   } ]);
+
 
 pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', 'picks',
  function ($scope, parseQuery, $location, $routeParams, users, picks){
