@@ -242,7 +242,7 @@ pikrAppServices.service( 'Details', function ( $q ) {
 								}
 								else
 								{
-											deferred.resolve('/usrmsg');
+											deferred.resolve('/usrmsg/');
 								}
 								
 						}, function(error) {
@@ -542,8 +542,7 @@ pikrAppServices.service('Files', function ($q){
 			var currentUser = Parse.User.current();
 			if (currentUser) { 
 			
-				parseFile.save().then(function ()
-  		{
+				parseFile.save().then(function (){
   			var pckimg = new Parse.Object("pckimg");
   			//pckimg.set("item", itm_name);
 					//pckimg.set("descrp", itm_descrp);
@@ -704,8 +703,7 @@ pikrAppServices.service('Files', function ($q){
 
 
 });
-function getAge(dateString) 
-{
+function getAge(dateString) {
     var today = new Date();
     var birthDate = new Date(dateString);
     var age = today.getFullYear() - birthDate.getFullYear();

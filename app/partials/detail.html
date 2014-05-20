@@ -1,5 +1,5 @@
 <div class="table-responsive" ng-controller="detailsCtrl">
-		<h4>Results</h4>	
+		<h4>Results (Test)</h4>	
 		<table class="table table-hover table-condensed">
 					<thead>
 							<tr>
@@ -11,7 +11,7 @@
 					</thead>
 					<tbody ng-repeat="detail in details | filter: params.user | orderBy:detail.created">
 							<tr>
-									<td>{{ detail.pckid }}</td>
+									<td><a href="#/details/{{ detail.pckid }}">{{ detail.pckid }}</a></td>
 								 <td>
 														<p ng-repeat="result in results | filter:detail.id">
 																{{ result.descrp }}

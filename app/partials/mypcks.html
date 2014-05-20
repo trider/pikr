@@ -1,9 +1,18 @@
 <div ng-controller="detailsCtrl">
+	<h4>Picks</h4>
+ <ol>
+			<li ng-repeat="pck in picks">
+				<a href="#/pikr/{{ pck.pckid }}/{{ status }}">{{ pck.pckid }}</a> 
+					{{ pck.descrp }}
+					<span ng-repeat="detail in details| filter:pck.pckid  | filter: status">(submited: {{ detail.submitted }})</span>
+			</li>
+		</ol>
+  <hr />
 		<ol>
 			<li ng-repeat="pck in pcklst">
 				<a href="#/pikr/{{ pck.pckid }}/{{ status }}">{{ pck.pckid }}</a> 
 					{{ pck.description }}
-					<span ng-repeat="detail in details |filter:pck.pckid  | filter: status">(submited: {{ detail.submitted }})</span>
+					<span ng-repeat="detail in details | filter:pck.pckid  | filter: status">(submited: {{ detail.submitted }})</span>
 			</li>
 		</ol>
 		<!--<div pckr-Detail></div>-->

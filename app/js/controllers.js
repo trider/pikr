@@ -1,24 +1,36 @@
 Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61");
 var pikrAppControllers = angular.module( 'pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload'] );
 
-pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users',
-function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users){
+pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users', 'Files', 
+function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users, Files ){
 
 	angular.element("#logout, #usrmsg").hide();
 	$scope.params = $routeParams;
-	$scope.picks = picks.getpicks({ id: $scope.params.id });
+	
+	//$scope.picks = picks.getpicks({ id: $scope.params.id });
+	
+	var PckDetailsPromise = Files.getPck( parseQuery, $scope.params );
+ PckDetailsPromise.then( function ( res ) {
+    $scope.pckdetails = res;
+    $scope.picks = res.imgs;
+	});
+	
+	
 	var getUsrStatusPromise = users.getUsrStatus();
 	getUsrStatusPromise.then(function (res){
 		$scope.status = res;
 	});
+	
 	var getUsrIDPromise = users.getUsrID();
 	getUsrIDPromise.then(function (res){
 		$scope.status = res;
 	});
+	
 	var submittedPromise = Details.pckSubmittedStatus(parseQuery, $scope.params);
 	submittedPromise.then(function (res){
 		$location.path(res);
 	});
+	
 	$scope.handleDrop = function (item, bin){
 		$scope.message = item + ' has been dropped into ' + bin;
 	}
@@ -41,119 +53,127 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 } ]);
 
 pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', '$routeParams',
- function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams){
+ function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams)
+ {
 
-  	$scope.params = $routeParams;
-  	$scope.pcks = pcklst.getPcklst();
-  	$scope.filters = ["pick", "users"];
-  	$scope.dfilters = [{ 'type': 'gender' }, { 'type': 'status'}];
-  	$scope.dOptions = [{ 'id': 0, 'type': '-- Type --', 'value': '-- Options --' },
+ 	$scope.params = $routeParams;
+ 	$scope.filters = ["pick", "users"];
+ 	$scope.dfilters = [{ 'type': 'gender' }, { 'type': 'status'}];
+ 	$scope.dOptions = [{ 'id': 0, 'type': '-- Type --', 'value': '-- Options --' },
 																						{ 'id': 1, 'type': 'gender', 'value': 'Male' },
 																						{ 'id': 2, 'type': 'gender', 'value': 'Female' },
 																						{ 'id': 3, 'type': 'status', 'value': 'Single' },
 																						{ 'id': 1, 'type': 'status', 'value': 'Married'}];
-  	
-			$scope.picks = picks.getpicks({ id: $scope.params.id });
-  	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
-  	getDetailsPromise.then(function (res){
-  		$scope.details = res;
-  		$scope.orderProp = 'user';
-  		angular.element("#usrmsg, #status, #users").hide();
-  	});
+ 	$scope.pcks = pcklst.getPcklst();
+ 	//$scope.picks = picks.getpicks({ id: $scope.params.id });
+ 	var PcksPromise = Details.getPcks(parseQuery, $scope.params);
+ 	PcksPromise.then(function (res){
+ 		$scope.picks = res;
+ 	});
 
-  	var getResultsPromise = Details.getResults(parseQuery, "val");
-  	getResultsPromise.then(function (data){
-  		$scope.results = data;
-  	});
-  	$scope.go = function (path){
-  		$location.path(path);
-  	};
-  	$scope.activate = function (elm){
-  		angular.element(elm).prop('disabled', false);
-  	}
-  	$scope.showPck = function (){
-  		var id = angular.element("#pckid_txt").val();
-  		var user = angular.element("#usr_txt").val();
-  		$location.path('/pikr/' + id + '/' + user);
-  	};
-  	$scope.pcklst = pcklst.getPcklst({}, function (){
+ 	var getDetailsPromise = Details.getDetails(parseQuery, "pckid");
+ 	getDetailsPromise.then(function (res){
+ 		$scope.details = res;
+ 		$scope.orderProp = 'user';
+ 		angular.element("#usrmsg, #status, #users").hide();
+ 	});
 
-  	var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
-  	getTotalsPromise.then(function (res){
-  			$scope.totals = res;
-  		});
+ 	var getResultsPromise = Details.getResults(parseQuery, "val");
+ 	getResultsPromise.then(function (data){
+ 		$scope.results = data;
+ 	});
+ 	$scope.go = function (path){
+ 		$location.path(path);
+ 	};
+ 	$scope.activate = function (elm){
+ 		angular.element(elm).prop('disabled', false);
+ 	}
+ 	$scope.showPck = function (){
+ 		var id = angular.element("#pckid_txt").val();
+ 		var user = angular.element("#usr_txt").val();
+ 		$location.path('/pikr/' + id + '/' + user);
+ 	};
 
-  	var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
-  	countPckrsPromise.then(function (res){
-  			$scope.pckrs = res;
-					var getChartTotalsPromise = Details.getChartTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
-  			getChartTotalsPromise.then(function (res){
-
-  				var chart1 = {};
-  				chart1.type = "PieChart";
-  				chart1.cssStyle = "height:450px; width:400px;";
-  				chart1.data = res;
-
-  				chart1.options = {
-  					'title': 'Total results with ' + $scope.pckrs[0].usr_count + ' participants',
-  					"isStacked": "false",
-  					"fill": 10,
-  					"displayExactValues": true
-  				};
-
-  					chart1.formatters = {};
-
-  					$scope.chart1 = chart1;
-  				});
-  		});
-
-  	$scope.resultsBy = function (){
-
-  			var flt_type = $scope.dfilters[angular.element("#flt_type").val()].type;
-  			var flt_opt = angular.element("#flt_opt").val();
-  			var chart_type = angular.element("#flt_chart").val() + 'Chart';
-
-  			angular.element("#dresults").show();
-
-  			var pckUsrValsPromise = Details.pckStats(parseQuery, $scope.pcklst, flt_type, flt_opt);
-  			pckUsrValsPromise.then(function (res)
-  			{
-  				$scope.usrVals = res;
-  			});
-
-  			var pckUsrCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, flt_type, flt_opt);
-  			pckUsrCntPromise.then(function (res)
-  			{
-  				$scope.usrCnts = res;
-
-  					var MChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, flt_type, flt_opt, $scope.params);
-  					MChartPromise.then(function (res)
-  					{
-
-  						var chart2 = {};
-  						chart2.type = chart_type;
-  						chart2.data = res;
-
-  						chart2.options = {
-  							'title': 'Results by ' + flt_type + ': ' + flt_opt,
-  							"isStacked": "false",
-  							"fill": 10,
-  							"displayExactValues": true
-  						};
-
-  						chart2.formatters = {};
-
-  						$scope.chart2 = chart2;
-
-  					});
-  			});
-
-  		};
-
-  });
+			//var getTotalsPromise = Details.getTotals(parseQuery, $scope.picks, "pckid");
+ 		//getTotalsPromise.then(function (res){
+ 		//	$scope.totals = res;
+ 		//});
 
 
-  } ]);
+ 	$scope.pcklst = pcklst.getPcklst({}, function (){
+
+ 		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
+ 		getTotalsPromise.then(function (res){
+ 			$scope.totals = res;
+ 		});
+
+ 		var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
+ 		countPckrsPromise.then(function (res){
+ 			$scope.pckrs = res;
+ 			var getChartTotalsPromise = Details.getChartTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
+ 			getChartTotalsPromise.then(function (res){
+
+ 				var chart1 = {};
+ 				chart1.type = "PieChart";
+ 				chart1.cssStyle = "height:450px; width:400px;";
+ 				chart1.data = res;
+
+ 				chart1.options = {
+ 					'title': 'Total results with ' + $scope.pckrs[0].usr_count + ' participants',
+ 					"isStacked": "false",
+ 					"fill": 10,
+ 					"displayExactValues": true
+ 				};
+
+ 				chart1.formatters = {};
+
+ 				$scope.chart1 = chart1;
+ 			});
+ 		});
+ 		$scope.resultsBy = function (){
+
+ 			var flt_type = $scope.dfilters[angular.element("#flt_type").val()].type;
+ 			var flt_opt = angular.element("#flt_opt").val();
+ 			var chart_type = angular.element("#flt_chart").val() + 'Chart';
+
+ 			angular.element("#dresults").show();
+
+ 			var pckUsrValsPromise = Details.pckStats(parseQuery, $scope.pcklst, flt_type, flt_opt);
+ 			pckUsrValsPromise.then(function (res){
+ 				$scope.usrVals = res;
+ 			});
+
+ 			var pckUsrCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, flt_type, flt_opt);
+ 			pckUsrCntPromise.then(function (res){
+ 				$scope.usrCnts = res;
+
+ 				var MChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, flt_type, flt_opt, $scope.params);
+ 				MChartPromise.then(function (res){
+
+ 					var chart2 = {};
+ 					chart2.type = chart_type;
+ 					chart2.data = res;
+
+ 					chart2.options = {
+ 						'title': 'Results by ' + flt_type + ': ' + flt_opt,
+ 						"isStacked": "false",
+ 						"fill": 10,
+ 						"displayExactValues": true
+ 					};
+
+ 					chart2.formatters = {};
+
+ 					$scope.chart2 = chart2;
+
+ 				});
+ 			});
+
+ 		};
+
+ 	});
+
+
+ } ]);
 
 
 pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', 'picks',
@@ -298,8 +318,7 @@ pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'parsePersis
  			};
 
  			var createpckpromise = Files.createPck(parsePersistence, pck);
- 			createpckpromise.then(function (res)
- 			{
+ 			createpckpromise.then(function (res){
  				$scope.newpck = res;
  			});
  		}
