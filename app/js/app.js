@@ -56,7 +56,7 @@ pikrApp.config(['$routeProvider',
 										controller: "userCtrl"
 								})
 								.when('/usrmsg', {
-										templateUrl: 'partials/usrmsg.html',
+										templateUrl: 'partials/messages/usrmsg.html',
 										controller: "userCtrl"
 								}).when('/upload', {
 										templateUrl: 'partials/upload.html',

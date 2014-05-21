@@ -90,7 +90,7 @@ pikrAppServices.service( 'Details', function ( $q ) {
 					start: object.get( "start" ),
 					end: object.get( "end" ),
 					imgs: object.get( "imgs" )
-				} );
+				});
 			}
 
 			deferred.resolve(result);
@@ -102,6 +102,7 @@ pikrAppServices.service( 'Details', function ( $q ) {
 
 		return deferred.promise;
 	}
+
 
 		this.getResults= function (parseQuery, fld) {
 				
@@ -225,8 +226,6 @@ pikrAppServices.service( 'Details', function ( $q ) {
 					
 				return deferred.promise;
 		}
-
-
 		this.pckSubmittedStatus = function (parseQuery, params){
 
 					var deferred = $q.defer();
@@ -252,21 +251,20 @@ pikrAppServices.service( 'Details', function ( $q ) {
 						return deferred.promise;
 
 		}
-		this.getTotals = function (parseQuery, pcklst, fld){
-
+		this.getTotals = function (parseQuery, pcklst, fld, params){
 				var query = parseQuery.new('picksObject').ascending(fld);	
 				var total = new Array();
 				var deferred = $q.defer();
 				query.find(query).then(function(results) {
 												
 						angular.forEach(pcklst, function(value, key){
-								var items = value.items;
+								var items = value.imgs;
 								angular.forEach(items, function(item, k){
 											var val = 0;
 											var desc;
 											for (var i = 0; i < results.length; i++) { 
 														var object = results[i];	
-														if(value.pckid == object.get('pckid') && item == object.get('item')){
+														if(params.id == object.get('pckid') && item.item == object.get('item')){
 																	val += 	object.get('val');				
 																	desc = object.get('descrp');
 														}		
@@ -282,7 +280,6 @@ pikrAppServices.service( 'Details', function ( $q ) {
 							});
 						
 							deferred.resolve(total);
-	
 					});
 																					
 			});
@@ -300,16 +297,16 @@ pikrAppServices.service( 'Details', function ( $q ) {
 				query.find(query).then(function(results) {
 												
 						angular.forEach(pcklst, function(value, key){
-								var items = value.items;
-								angular.forEach(items, function(item, k){
+								var items = value.imgs;
+								angular.forEach(items, function(itm, k){
 											var val = 0;
 											for (var i = 0; i < results.length; i++) { 
 														var object = results[i];	
-														if(value.pckid == params.id && item == object.get('item')){
+														if(object.get('pckid') == params.id && itm.item == object.get('item')){
 																	val += 	object.get('val');				
 														}		
 											}
-											total.push( {c: [{ v: item }, {v: val }]});
+											total.push( {c: [{ v: itm.item }, {v: val }]});
 															
 							});
 
@@ -337,7 +334,7 @@ pikrAppServices.service( 'Details', function ( $q ) {
 				query.matchesQuery("user", innerQuery);
 				query.find(query).then(function(results) {	
 					angular.forEach(pcklst, function(value, key){
-						if(value.pckid == params.id){
+					//	if(value.pckid == params.id){
 								var items = value.items;	
 								angular.forEach(items, function(item, k){
 									var val = 0;
@@ -353,7 +350,7 @@ pikrAppServices.service( 'Details', function ( $q ) {
 																		
 														
 							});
-						}
+					//	}
 						
 						var totals = {"cols": [
         {id: "Items", label: "Item", type: "string"},

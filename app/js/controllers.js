@@ -1,13 +1,11 @@
 Parse.initialize("caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61");
 var pikrAppControllers = angular.module( 'pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload'] );
 
-pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', 'picks', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users', 'Files', 
-function ($scope, $window, picks, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users, Files ){
+pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Name', 'Details', 'users', 'Files', 
+function ($scope, $window, $location, parsePersistence, parseQuery, $routeParams, Submit, Name, Details, users, Files ){
 
 	angular.element("#logout, #usrmsg").hide();
 	$scope.params = $routeParams;
-	
-	//$scope.picks = picks.getpicks({ id: $scope.params.id });
 	
 	var PckDetailsPromise = Files.getPck( parseQuery, $scope.params );
  PckDetailsPromise.then( function ( res ) {
@@ -52,8 +50,8 @@ function ($scope, $window, picks, $location, parsePersistence, parseQuery, $rout
 	}
 } ]);
 
-pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', 'pcklst', 'picks', '$routeParams',
- function ($scope, $location, parseQuery, Details, pcklst, picks, $routeParams)
+pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery', 'Details', '$routeParams', '$rootScope', 'Files',
+ function ($scope, $location, parseQuery, Details, $routeParams, $rootScope, Files)
  {
 
  	$scope.params = $routeParams;
@@ -64,8 +62,22 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 																						{ 'id': 2, 'type': 'gender', 'value': 'Female' },
 																						{ 'id': 3, 'type': 'status', 'value': 'Single' },
 																						{ 'id': 1, 'type': 'status', 'value': 'Married'}];
- 	$scope.pcks = pcklst.getPcklst();
- 	//$scope.picks = picks.getpicks({ id: $scope.params.id });
+
+		$scope.go = function (path)	{
+ 		$location.path(path);
+ 	};
+
+ 	$scope.activate = function (elm){
+ 		angular.element(elm).prop('disabled', false);
+ 	};
+
+
+ 	$scope.showPck = function (){
+ 		var id = angular.element("#pckid_txt").val();
+ 		var user = angular.element("#usr_txt").val();
+ 		//$location.path('/pikr/' + id + '/' + user);
+ 	};
+
  	var PcksPromise = Details.getPcks(parseQuery, $scope.params);
  	PcksPromise.then(function (res){
  		$scope.picks = res;
@@ -82,36 +94,25 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  	getResultsPromise.then(function (data){
  		$scope.results = data;
  	});
- 	$scope.go = function (path){
- 		$location.path(path);
- 	};
- 	$scope.activate = function (elm){
- 		angular.element(elm).prop('disabled', false);
- 	}
- 	$scope.showPck = function (){
- 		var id = angular.element("#pckid_txt").val();
- 		var user = angular.element("#usr_txt").val();
- 		$location.path('/pikr/' + id + '/' + user);
- 	};
 
-			//var getTotalsPromise = Details.getTotals(parseQuery, $scope.picks, "pckid");
- 		//getTotalsPromise.then(function (res){
- 		//	$scope.totals = res;
- 		//});
+ 	var PckPromise = Files.getPck(parseQuery, $scope.params);
+ 	PcksPromise.then(function (res)
+ 	{
+ 		$scope.pcklst = res;
 
-
- 	$scope.pcklst = pcklst.getPcklst({}, function (){
-
- 		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid");
- 		getTotalsPromise.then(function (res){
- 			$scope.totals = res;
+ 		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
+ 		getTotalsPromise.then(function (data)
+ 		{
+ 			$scope.totals = data;
  		});
 
  		var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
- 		countPckrsPromise.then(function (res){
+ 		countPckrsPromise.then(function (res)
+ 		{
  			$scope.pckrs = res;
  			var getChartTotalsPromise = Details.getChartTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
- 			getChartTotalsPromise.then(function (res){
+ 			getChartTotalsPromise.then(function (res)
+ 			{
 
  				var chart1 = {};
  				chart1.type = "PieChart";
@@ -130,7 +131,9 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  				$scope.chart1 = chart1;
  			});
  		});
- 		$scope.resultsBy = function (){
+
+ 		$scope.resultsBy = function ()
+ 		{
 
  			var flt_type = $scope.dfilters[angular.element("#flt_type").val()].type;
  			var flt_opt = angular.element("#flt_opt").val();
@@ -139,16 +142,19 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  			angular.element("#dresults").show();
 
  			var pckUsrValsPromise = Details.pckStats(parseQuery, $scope.pcklst, flt_type, flt_opt);
- 			pckUsrValsPromise.then(function (res){
+ 			pckUsrValsPromise.then(function (res)
+ 			{
  				$scope.usrVals = res;
  			});
 
  			var pckUsrCntPromise = Details.pckStatsTotals(parseQuery, $scope.pcklst, flt_type, flt_opt);
- 			pckUsrCntPromise.then(function (res){
+ 			pckUsrCntPromise.then(function (res)
+ 			{
  				$scope.usrCnts = res;
 
  				var MChartPromise = Details.pckChartStats(parseQuery, $scope.pcklst, flt_type, flt_opt, $scope.params);
- 				MChartPromise.then(function (res){
+ 				MChartPromise.then(function (res)
+ 				{
 
  					var chart2 = {};
  					chart2.type = chart_type;
@@ -172,12 +178,11 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 
  	});
 
-
  } ]);
 
 
-pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', 'picks',
- function ($scope, parseQuery, $location, $routeParams, users, picks){
+pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', 'picks', 
+	function ($scope, parseQuery, $location, $routeParams, users, picks){
   	
 			angular.element("#loginbox, #join, #intro").show();
 			angular.element("#mypicks, #logoutbox, #details, #totals, #usrmsg").hide();
@@ -258,8 +263,8 @@ pikrAppControllers.controller('userCtrl', ['$scope', 'parseQuery', '$location', 
 
   } ]);
 
-pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'parsePersistence', 'users', '$upload', 'Files', '$location', '$rootScope',
- function ($scope, parseQuery, parsePersistence, users, $upload, Files, $location, $rootScope){
+pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'parsePersistence', 'users', '$upload', 'Files', '$location', '$rootScope', 
+	function ($scope, parseQuery, parsePersistence, users, $upload, Files, $location, $rootScope){
 
 	$scope.onFileSelect = function ($files){
  		var filespromise = Files.uploadFile($files[0]);
@@ -328,3 +333,4 @@ pikrAppControllers.controller('filesCtrl', ['$scope', 'parseQuery', 'parsePersis
  };
 
 } ]);	
+

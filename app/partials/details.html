@@ -1,4 +1,4 @@
-<div class="col-md-10 col-md-offset-1">
+<div class="col-md-10 col-md-offset-1" ng-controller="detailsCtrl">
 	<h2>Results  for {{ params.id }}</h2>
 		<!--<div pck-Result></div>-->
 		<div class="well col-md-10 col-md-offset-*">
@@ -10,8 +10,8 @@
 				</div>
 				<div class="col-md-10 col-md-offset-*">
 								<div ng-repeat="pck in pcklst | filter:pckid | filter:params.id">
-									<p><b>Description: </b>{{ pck.description }}</p>
-									<p><b>Results</b>:<span ng-repeat="total in totals | filter:pck.pckid"> {{ total.item }}({{ total.val }}); </span></p>
+									<p><b>Description: </b>{{ pck.descrp }}</p>
+									<p><b>Results</b>:<span ng-repeat="total in totals"> {{ total.item.item	 }}({{ total.val }}); </span></p>
 									<b>Participants</b>: <span ng-repeat="pckr in pckrs | filter:pck.pckid"> {{ pckr.usr_count }}</span></p>
 							</div>
 				</div>

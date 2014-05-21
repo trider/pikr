@@ -4,6 +4,7 @@
 	<div class="col-md-3 col-md-offset-*" ng-repeat="usr_img in usr_imgs">
 			<img class="thumbnail" src="{{ usr_img.url }}">
 			<input type="checkbox" ng-model="val" ng-true-value=true ng-change="countSelectedPic(val, usr_img)"> 
-			<b>{{ usr_img.name }}:</b><br>{{ usr_img.descrp }}</div>
+			<b>{{ usr_img.name }}:</b><br>{{ usr_img.descrp }}
+		</div>
 	</div>	
 </div>	

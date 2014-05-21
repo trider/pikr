@@ -172,13 +172,13 @@ pikrAppDirectives.directive('pckMypcks', function ()
 	};
 });
 
-pikrAppDirectives.directive('pckMsg', function ()
-{
-	return {
-		transclude: true,
-		templateUrl: 'partials/messages/usrmsg.html'
-	};
-});
+//pikrAppDirectives.directive('pckMsg', function ()
+//{
+//	return {
+//		transclude: true,
+//		templateUrl: 'partials/messages/usrmsg.html'
+//	};
+//});
 
 pikrAppDirectives.directive('pckUsrdata', function ()
 {
@@ -188,13 +188,13 @@ pikrAppDirectives.directive('pckUsrdata', function ()
 	};
 });
 
-pikrAppDirectives.directive('pckPics', function ()
-{
-	return {
-		transclude: true,
-		templateUrl: 'partials/directives/pics.html'
-	};
-});
+//pikrAppDirectives.directive('pckPics', function ()
+//{
+//	return {
+//		transclude: true,
+//		templateUrl: 'partials/directives/pics.html'
+//	};
+//});
 
 pikrAppDirectives.directive('pckResultsby', function ()
 {
