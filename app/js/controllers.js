@@ -100,8 +100,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  		$scope.pcklst = res;
 
  		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
- 		getTotalsPromise.then(function (data)
- 		{
+ 		getTotalsPromise.then(function (data){
  			$scope.totals = data;
  		});
 
