@@ -96,8 +96,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  	});
 
  	var PckPromise = Files.getPck(parseQuery, $scope.params);
- 	PcksPromise.then(function (res)
- 	{
+ 	PcksPromise.then(function (res){
  		$scope.pcklst = res;
 
  		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
