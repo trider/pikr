@@ -1,7 +1,7 @@
-<div class="row" ng-controller="detailsCtrl">
-		<div class="col-md-4 col-md-offset-*" ng-repeat="pick in picks">
+<div class="row">
+		<div class="col-md-4 col-md-offset-*" ng-repeat="pckimg in pckimgs">
 		<div class="thumbnail">
-			<img src="{{ pick.url }}">
-			<div><b>{{ pick.items }}: </b>{{ pick.descrp }}</div>
+			<img src="{{ pckimg.url }}">
+			<div><b>{{ pckimg.item }}: </b><br />{{ pckimg.descrp }}</div>
 		</div>
 	</div>

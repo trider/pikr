@@ -99,6 +99,11 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  	PcksPromise.then(function (res){
  		$scope.pcklst = res;
 
+ 		var PckDetailsPromise = Files.getPck( parseQuery, $scope.params );
+ 		PckDetailsPromise.then( function ( res ) {
+ 			$scope.pckimgs = res.imgs;
+ 		} );
+
  		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
  		getTotalsPromise.then(function (data){
  			$scope.totals = data;
@@ -130,8 +135,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  			});
  		});
 
- 		$scope.resultsBy = function ()
- 		{
+ 		$scope.resultsBy = function (){
 
  			var flt_type = $scope.dfilters[angular.element("#flt_type").val()].type;
  			var flt_opt = angular.element("#flt_opt").val();
