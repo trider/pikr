@@ -16,10 +16,10 @@
 					<tbody ng-repeat="pck in pcklst | filter:pckid | filter:params.id">
 							<tr>
 									<td><a href="#/details/{{ pck.pckid }}">{{ pck.pckid }}</a></td>
-									<td>{{ pck.description }}</td>
+									<td>{{ pck.descrp }}</td>
 									<td>
-													<div ng-repeat="total in totals | filter:pck.pckid">
-																{{ total.descrp }} 
+													<div ng-repeat="total in totals | filter:pck.pckid ">
+																{{ total.item }} 
 													 </div>
 									</td>
 								 <td>
@@ -29,11 +29,11 @@
 									</td>
 									<td>
 													<div ng-repeat="pckr in pckrs | filter:pck.pckid">
-																{{ pckr.count }}
+																{{ pckr.usr_count }}
 													 </div>
 									</td>
 							</tr>
 					</tbody>
-	</table>
-</div>
+	 </table>
+ </div>
 </div>

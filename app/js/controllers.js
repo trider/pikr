@@ -78,7 +78,7 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  		//$location.path('/pikr/' + id + '/' + user);
  	};
 
- 	var PcksPromise = Details.getPcks(parseQuery, $scope.params);
+ 	var PcksPromise = Details.getPcks(parseQuery);
  	PcksPromise.then(function (res){
  		$scope.picks = res;
  	});
@@ -107,7 +107,8 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
  		var getTotalsPromise = Details.getTotals(parseQuery, $scope.pcklst, "pckid", $scope.params);
  		getTotalsPromise.then(function (data){
  			$scope.totals = data;
- 		});
+ 		} );
+
 
  		var countPckrsPromise = Details.countPckrs(parseQuery, $scope.pcklst, "pckid");
  		countPckrsPromise.then(function (res)

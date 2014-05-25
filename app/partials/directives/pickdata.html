@@ -3,7 +3,7 @@
 	<!--<div class="helptext col-md-2 col-md-offset-*"><b>ObjectID:</b> {{ params.parentID }}</div>-->
 	<div class="helptext">
 			<p><b>Pick:</b>
-					<span ng-repeat="result in results | filter:params.parentID | orderBy:result.Item">{{ result.item }} ({{ result.val }}); </span>
+					<span ng-repeat="result in results | filter:params.id | orderBy:result.item">{{ result.item }} ({{ result.val }}); </span>
 			</p>
 			</div>
 			<div ng-repeat="detail in details |filter:params.parentID | orderBy:detail.created">

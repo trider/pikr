@@ -9,9 +9,9 @@
 								<div google-chart chart="chart1" style="height300px; width:100%;"></div>
 				</div>
 				<div class="col-md-10 col-md-offset-*">
-								<div ng-repeat="pck in pcklst | filter:pckid | filter:params.id">
+								<div ng-repeat="pck in pcklst | filter:params.id">
 									<p><b>Description: </b>{{ pck.descrp }}</p>
-									<p><b>Results</b>:<span ng-repeat="total in totals"> {{ total.item.item	 }}({{ total.val }}); </span></p>
+									<p><b>Results</b>:<span ng-repeat="total in totals | filter:params.id | filter:pck.pckid"> {{ total.item	 }}({{ total.val }}); </span></p>
 									<b>Participants</b>: <span ng-repeat="pckr in pckrs | filter:pck.pckid"> {{ pckr.usr_count }}</span></p>
 							</div>
 				</div>
