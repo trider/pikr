@@ -185,7 +185,14 @@ pikrAppDirectives.directive('pckUsrdata', function ()
 		transclude: true,
 		templateUrl: 'partials/forms/usrdata.html'
 	};
-});
+} );
+
+pikrAppDirectives.directive( 'pckFbusrdata', function () {
+	return {
+		transclude: true,
+		templateUrl: 'partials/forms/fbusrdata.html'
+	};
+} );
 
 pikrAppDirectives.directive('pckPics', function (){
 	return {

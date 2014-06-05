@@ -460,6 +460,8 @@ pikrAppServices.service( 'users', function ( $q ) {
 	this.userLogin = function ( usr, pw ) {
 
 		var deferred = $q.defer();
+
+
 		Parse.User.logIn( usr, pw, {
 			success: function ( user ) {
 				deferred.resolve( usr );
@@ -468,6 +470,8 @@ pikrAppServices.service( 'users', function ( $q ) {
 				alert( "Error: " + error.code + " " + error.message );
 			}
 		} );
+
+
 
 		return deferred.promise;
 	}
