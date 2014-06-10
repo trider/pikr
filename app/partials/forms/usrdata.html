@@ -20,6 +20,22 @@
 			<div class="col-md-4 col-md-offset-*"><p><b>Profession: </b>{{ usr.profession }}</p></div>
 		</div>
 	<a href="#/user/">Change</a>	
+ <hr />
+<div class="well">
+  <p>ID: {{ fbusr.id }}</p>
+  <p>User: {{ fbusr.username }}</p>
+  <p>Name: {{ fbusr.name }}</p>
+  <p>Birthday: {{ fbusr.birthday }}</p>
+  <p>Gender: {{ fbusr.gender }}</p>
+  <p>Link: {{ fbusr.link }}</p>
+  <p>Email: {{ fbusr.email }}</p>
+  <p>Locale: {{ fbusr.locale }}</p>
+  <button type="submit" class="btn btn-default" ng-click="pikrFBLogin()">Login with Facebook</button>
+  <hr />
+  <p>{{ fbfeed }}</p>
+</div>
+
+   
 </div>
 
 

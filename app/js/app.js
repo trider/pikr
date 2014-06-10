@@ -59,7 +59,7 @@ pikrApp.config( ['$routeProvider',function ( $routeProvider ) {
 pikrApp.config( ['FacebookProvider', function ( FacebookProvider ) {
 	// Here you could set your appId through the setAppId method and then initialize
 	FacebookProvider.init( '420875628049980' );
-	
+
 }] );
 
 

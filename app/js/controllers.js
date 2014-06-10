@@ -1,4 +1,5 @@
 Parse.initialize( "caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61" );
+
 var pikrAppControllers = angular.module( 'pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload'] );
 
 pikrAppControllers.controller('pikrCtrl', ['$scope', '$window', '$location', 'parsePersistence', 'parseQuery', '$routeParams', 'Submit', 'Details', 'users', 'Files', 'Name',
@@ -180,11 +181,26 @@ pikrAppControllers.controller('detailsCtrl', ['$scope', '$location', 'parseQuery
 
  }] );
 
-pikrAppControllers.controller( 'userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', '$timeout', 
-	function ( $scope, parseQuery, $location, $routeParams, users, $timeout ) {
+pikrAppControllers.controller( 'userCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', '$timeout', 'Facebook', 
+function ( $scope, parseQuery, $location, $routeParams, users, $timeout, Facebook  ) {
 
 		angular.element( "#loginbox, #join, #intro" ).show();
 		angular.element( "#mypicks, #logoutbox, #details, #totals, #usrmsg" ).hide();
+
+		
+		$scope.pikrFBLogin = function () {
+
+			var fbusrpromise = users.userFBLogin( Facebook );
+			fbusrpromise.then( function ( res ) {
+				$scope.fbusr = res;
+
+				Facebook.api( '/me/friends', function ( response ) {
+					$scope.fbfeed = response;
+				});
+
+			});
+
+		};
 
 		var stspromise = users.getUsrStatus();
 		stspromise.then( function ( res ) {
@@ -220,7 +236,6 @@ pikrAppControllers.controller( 'userCtrl', ['$scope', 'parseQuery', '$location',
 
 			var pw = angular.element( "#pwtxt" ).val();
 			var usr = angular.element( "#usrtxt" ).val();
-
 
 			var loginpromise = users.userLogin( usr, pw );
 			loginpromise.then( function ( res ) {
@@ -265,21 +280,22 @@ pikrAppControllers.controller( 'userCtrl', ['$scope', 'parseQuery', '$location',
 
 
 
-pikrAppControllers.controller('fbCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', 'Facebook', '$timeout',
-	function ($scope, parseQuery, $location, $routeParams, users, Facebook, $timeout){
+pikrAppControllers.controller('fbCtrl', ['$scope', 'parseQuery', '$location', '$routeParams', 'users', 'Facebook', '$timeout', 
+function ( $scope, parseQuery, $location, $routeParams, users, Facebook, $timeout ) {
   
 			$scope.logged = false;
 			$scope.byebye = false;
 			$scope.salutation = false;
-		 
 
 		 //Watch for Facebook to be ready.
 			$scope.$watch( function () {
 						return Facebook.isReady();
 					}, function ( newVal ) {
+
 						if ( newVal ) $scope.facebookReady = true;
 					}
 			);
+
 
 
 
@@ -290,6 +306,7 @@ pikrAppControllers.controller('fbCtrl', ['$scope', 'parseQuery', '$location', '$
 						$scope.logged = true;
 						$scope.me();
 						$scope.friends();
+
 					}
 					else
 						$scope.fblogin();
@@ -299,15 +316,25 @@ pikrAppControllers.controller('fbCtrl', ['$scope', 'parseQuery', '$location', '$
 
 		 //Login
 			$scope.fblogin = function () {
+
 				Facebook.login( function ( response ) {
 					if ( response.status == 'connected' ) {
 
 						$scope.logged = true;
 						$scope.me();
 						$scope.friends();
+						
 					}
+
+				
+
 				} );
+
+				
+
 			};
+
+			
 
 			//me
 			$scope.me = function () {

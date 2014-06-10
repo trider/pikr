@@ -442,6 +442,7 @@ pikrAppServices.service( 'users', function ( $q ) {
 			user.signUp( null, {
 				success: function ( user ) {
 					deferred.resolve( user.get( 'username' ) );
+				
 				},
 				error: function ( user, error ) {
 					alert( "Error: " + error.code + " " + error.message );
@@ -475,6 +476,48 @@ pikrAppServices.service( 'users', function ( $q ) {
 
 		return deferred.promise;
 	}
+
+	this.userFBLogin = function ( Facebook ) {
+
+		var deferred = $q.defer();
+		var user = Parse.User.current();
+
+		Parse.FacebookUtils.init( { appId: 420875628049980 } );
+
+		//Parse.FacebookUtils.unlink( user, {
+		//	success: function ( user ) {
+		//		alert( "The user is no longer associated with their Facebook account." );
+		//	}
+		//} );
+
+		//if ( !Parse.FacebookUtils.isLinked( user ) ) {
+		//	Parse.FacebookUtils.link( user, "email, public_profile, user_friends", {
+		//		success: function ( user ) {
+		//			alert( "Woohoo, user logged in with Facebook!" );
+		//		},
+		//		error: function ( user, error ) {
+		//			alert( "User cancelled the Facebook login or did not fully authorize." );
+		//		}
+		//	} );
+		//}
+
+		Parse.FacebookUtils.logIn( "email, public_profile, user_friends", {
+			success: function ( user ) {
+				var object = new Array();
+				Facebook.api( '/me', function ( response ) {
+					deferred.resolve( response );
+				});
+
+			}, error: function ( user, error ) {
+				alert( "User cancelled the Facebook login or did not fully authorize." );
+			}
+		} );
+
+		
+
+		return deferred.promise;
+	}
+
 
 	this.userLogout = function () {
 
