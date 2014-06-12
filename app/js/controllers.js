@@ -1,3 +1,6 @@
+//var parsefbint = 420875628049980; //prod app id
+var parsefbint = 447892032015006; //test app id
+
 Parse.initialize( "caGilChjK2xB4EpbvVUClKykubFAYglCnTgSMxor", "DuKbXI4WWizZifKQGpTLwoRUJbk3XJ6uhruRof61" );
 
 var pikrAppControllers = angular.module( 'pikrAppControllers', ['angularParse', 'googlechart', 'angularFileUpload'] );
@@ -186,17 +189,40 @@ function ( $scope, parseQuery, $location, $routeParams, users, $timeout, Faceboo
 
 		angular.element( "#loginbox, #join, #intro" ).show();
 		angular.element( "#mypicks, #logoutbox, #details, #totals, #usrmsg" ).hide();
+			
+		$scope.pikrFBLink = function () {
 
-		
+			Parse.FacebookUtils.init( { appId: parsefbint } );
+
+			var fblinkusrpromise = users.userFBLink( Facebook );
+			fblinkusrpromise.then( function ( res ) {
+				$scope.fbusrstatus = res;
+			});
+
+		};
+		$scope.pikrFBUnlink = function () {
+
+			Parse.FacebookUtils.init( { appId: parsefbint } );
+
+			var fblunlinkusrpromise = users.userFBUnlink( Facebook );
+			fblunlinkusrpromise.then( function ( res ) {
+				$scope.fbusrstatus = res;
+			});
+
+		};
 		$scope.pikrFBLogin = function () {
+
+			Parse.FacebookUtils.init( { appId: parsefbint } );
 
 			var fbusrpromise = users.userFBLogin( Facebook );
 			fbusrpromise.then( function ( res ) {
 				$scope.fbusr = res;
+				$scope.fbusrstatus = "Connected to Facebook";
 
-				Facebook.api( '/me/friends', function ( response ) {
-					$scope.fbfeed = response;
-				});
+				Facebook.api( '/me?fields=friends.fields(name,gender,username, first_name, last_name).limit(5)', function ( response ) {
+					$scope.fbfriends = response.friends.data;
+
+				} );
 
 			});
 

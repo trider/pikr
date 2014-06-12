@@ -22,6 +22,7 @@
 	<a href="#/user/">Change</a>	
  <hr />
 <div class="well">
+  <p>Status: {{ fbusrstatus }}</p>
   <p>ID: {{ fbusr.id }}</p>
   <p>User: {{ fbusr.username }}</p>
   <p>Name: {{ fbusr.name }}</p>
@@ -30,9 +31,31 @@
   <p>Link: {{ fbusr.link }}</p>
   <p>Email: {{ fbusr.email }}</p>
   <p>Locale: {{ fbusr.locale }}</p>
+  <button type="submit" class="btn btn-default" ng-click="pikrFBLink()">Link account to Facebook</button>
   <button type="submit" class="btn btn-default" ng-click="pikrFBLogin()">Login with Facebook</button>
+  <button type="submit" class="btn btn-default" ng-click="pikrFBUnlink()">Unlink account from Facebook</button>
   <hr />
-  <p>{{ fbfeed }}</p>
+  <!--<div> ng-repeat="fbfriend in fbfriends">{{ fbfrd.name }}({{fbfrd.id}}); </div>-->
+  <div class="table-responsive">
+		<table class="table table-hover table-condensed">
+					<thead>
+							<tr>
+									<th>id</th>
+									<th>usename</th>
+         <th>name</th>
+									<th>gender</th>
+							</tr>
+					</thead>
+					<tbody ng-repeat="fbfriend in fbfriends">
+							<tr>
+									<td>{{ fbfriend.id }}</td>
+         <td>{{ fbfriend.username }}</td>
+         <td>{{ fbfriend.name }}</td>
+									<td>{{ fbfriend.gender }}</td>
+							</tr>
+					</tbody>
+	 </table>
+ </div>
 </div>
 
    

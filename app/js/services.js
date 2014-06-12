@@ -482,25 +482,6 @@ pikrAppServices.service( 'users', function ( $q ) {
 		var deferred = $q.defer();
 		var user = Parse.User.current();
 
-		Parse.FacebookUtils.init( { appId: 420875628049980 } );
-
-		//Parse.FacebookUtils.unlink( user, {
-		//	success: function ( user ) {
-		//		alert( "The user is no longer associated with their Facebook account." );
-		//	}
-		//} );
-
-		//if ( !Parse.FacebookUtils.isLinked( user ) ) {
-		//	Parse.FacebookUtils.link( user, "email, public_profile, user_friends", {
-		//		success: function ( user ) {
-		//			alert( "Woohoo, user logged in with Facebook!" );
-		//		},
-		//		error: function ( user, error ) {
-		//			alert( "User cancelled the Facebook login or did not fully authorize." );
-		//		}
-		//	} );
-		//}
-
 		Parse.FacebookUtils.logIn( "email, public_profile, user_friends", {
 			success: function ( user ) {
 				var object = new Array();
@@ -514,6 +495,40 @@ pikrAppServices.service( 'users', function ( $q ) {
 		} );
 
 		
+
+		return deferred.promise;
+	}
+
+	this.userFBLink = function ( Facebook ) {
+
+		var deferred = $q.defer();
+		var user = Parse.User.current();
+
+
+		if ( !Parse.FacebookUtils.isLinked( user ) ) {
+			Parse.FacebookUtils.link( user, "email, public_profile, user_friends", {
+				success: function ( user ) {
+					deferred.resolve( "Woohoo, user logged in with Facebook!" );
+				},
+				error: function ( user, error ) {
+					deferred.resolve( "User cancelled the Facebook login or did not fully authorize." );
+				}
+			});
+		}
+
+		return deferred.promise;
+	}
+
+	this.userFBUnlink = function ( Facebook ) {
+
+		var deferred = $q.defer();
+		var user = Parse.User.current();
+
+		Parse.FacebookUtils.unlink( user, {
+			success: function ( user ) {
+				deferred.resolve( "The user is no longer associated with their Facebook account." );
+			}
+		} );
 
 		return deferred.promise;
 	}
